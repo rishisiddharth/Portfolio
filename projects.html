@@ -4,256 +4,325 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects - Rishi Siddharth</title>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.7;
-            color: #333;
+            font-family: 'DM Sans', sans-serif;
+            color: #2c2c2c;
+            background: #f6f4f0;
         }
-        
+
+        /* SPLIT LAYOUT */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .photo-side {
+            width: 45%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .photo-side img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .content-side {
+            width: 55%;
+            margin-left: 45%;
+            min-height: 100vh;
+        }
+
         /* NAVIGATION */
         nav {
-            background: #fff;
-            padding: 30px 10%;
-            border-bottom: 1px solid #eee;
+            padding: 36px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        nav .logo {
-            font-size: 20px;
-            font-weight: 600;
-            color: #111;
+
+        nav .name {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: #2c2c2c;
+            text-decoration: none;
         }
-        
+
+        nav .name:hover {
+            color: #5a7a5a;
+        }
+
         nav .links {
             display: flex;
-            gap: 30px;
+            gap: 28px;
         }
-        
+
         nav a {
-            color: #333;
+            color: #666;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            padding: 10px 0;
-            border-bottom: 2px solid transparent;
-            transition: border-color 0.3s;
-        }
-        
-        nav a:hover {
-            border-bottom: 2px solid #0066cc;
-        }
-        
-        /* CONTENT */
-        .content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 100px 40px;
-        }
-        
-        h1 {
-            font-size: 48px;
-            margin-bottom: 60px;
-            color: #111;
-            font-weight: 600;
-        }
-        
-        .project-card {
-            margin-bottom: 60px;
-            padding-bottom: 60px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .project-card:last-child {
-            border-bottom: none;
-        }
-        
-        .project-card h2 {
-            font-size: 28px;
-            margin-bottom: 15px;
-            color: #111;
-        }
-        
-        .project-card h2 a {
-            color: #0066cc;
-            text-decoration: none;
             transition: color 0.3s;
         }
-        
-        .project-card h2 a:hover {
-            color: #0052a3;
+
+        nav a:hover,
+        nav a.active {
+            color: #2c2c2c;
         }
-        
-        .project-meta {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 15px;
+
+        /* MAIN CONTENT */
+        .main {
+            padding: 60px 50px 100px;
+            max-width: 620px;
         }
-        
-        .project-description {
-            font-size: 16px;
-            line-height: 1.7;
+
+        h1 {
+            font-family: 'EB Garamond', serif;
+            font-size: 42px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+
+        /* PROJECT CARDS */
+        .project {
+            margin-bottom: 36px;
+            padding-bottom: 36px;
+            border-bottom: 1px solid #e5e2dc;
+        }
+
+        .project:last-child {
+            border-bottom: none;
+        }
+
+        .project h2 {
+            font-family: 'EB Garamond', serif;
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .project h2 a {
+            color: #1a1a1a;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .project h2 a:hover {
+            border-bottom-color: #5a7a5a;
+            color: #5a7a5a;
+        }
+
+        .project .meta {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        .project p.desc {
+            font-size: 15px;
+            line-height: 1.65;
             color: #555;
         }
-        
-        h3 {
-            font-size: 32px;
-            margin: 80px 0 40px 0;
-            color: #111;
+
+        /* SECTION TITLE */
+        .section-divider {
+            width: 40px;
+            height: 1px;
+            background: #ccc;
+            margin: 50px 0;
         }
-        
-        .other-projects {
+
+        .section-title {
+            font-family: 'EB Garamond', serif;
+            font-size: 26px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 28px;
+        }
+
+        /* OTHER PROJECTS GRID */
+        .other-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
-        
-        .other-project {
-            padding: 25px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            transition: all 0.3s;
+
+        .other-card {
+            padding: 20px;
+            border: 1px solid #e5e2dc;
+            border-radius: 4px;
+            transition: border-color 0.3s;
         }
-        
-        .other-project:hover {
-            border-color: #0066cc;
-            box-shadow: 0 4px 12px rgba(0,102,204,0.1);
+
+        .other-card:hover {
+            border-color: #5a7a5a;
         }
-        
-        .other-project h4 {
-            font-size: 18px;
-            margin-bottom: 10px;
+
+        .other-card h4 {
+            font-family: 'EB Garamond', serif;
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 8px;
         }
-        
-        .other-project h4 a {
-            color: #333;
+
+        .other-card h4 a {
+            color: #1a1a1a;
             text-decoration: none;
         }
-        
-        .other-project h4 a:hover {
-            color: #0066cc;
+
+        .other-card h4 a:hover {
+            color: #5a7a5a;
         }
-        
-        .other-project p {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.5;
+
+        .other-card p {
+            font-size: 13px;
+            line-height: 1.55;
+            color: #777;
         }
-        
+
         /* RESPONSIVE */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .photo-side {
+                position: relative;
+                width: 100%;
+                height: 50vh;
+            }
+
+            .content-side {
+                width: 100%;
+                margin-left: 0;
+            }
+
             nav {
+                padding: 24px 24px;
                 flex-direction: column;
-                gap: 20px;
-                padding: 20px 5%;
+                gap: 16px;
             }
-            
+
             nav .links {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
+                gap: 20px;
             }
-            
-            .content {
-                padding: 60px 20px;
+
+            .main {
+                padding: 40px 24px 60px;
             }
-            
+
             h1 {
-                font-size: 36px;
+                font-size: 32px;
             }
-            
-            .other-projects {
+
+            .other-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- NAVIGATION -->
-    <nav>
-        <div class="logo">RISHI SIDDHARTH</div>
-        <div class="links">
-            <a href="index.html">HOME</a>
-            <a href="bio.html">BIO</a>
-            <a href="experience.html">EXPERIENCE</a>
-            <a href="projects.html">PROJECTS</a>
-            <a href="writing.html">WRITING</a>
-            <a href="contact.html">CONTACT</a>
+    <div class="layout">
+        <!-- FIXED PHOTO -->
+        <div class="photo-side">
+            <img src="images/chess.jpeg" alt="Rishi Siddharth">
         </div>
-    </nav>
 
-    <!-- CONTENT -->
-    <div class="content">
-        <h1>Projects & Research</h1>
-        
-        <div class="project-card">
-            <h2><a href="https://github.com/lse-ds205/tpi-apis" target="_blank">TPI Climate Assessment API</a></h2>
-            <p class="project-meta">Transition Pathway Initiative - London School of Economics | Jan 2025 - April 2025</p>
-            <p class="project-description">
-                Co-developed FastAPI application providing programmatic access to TPI Centre's climate assessments covering 2,000+ publicly listed companies and 85 sovereign entities, supporting 156 global investors managing $87 trillion AUM. Built RESTful endpoints for Management Quality (23 indicators) and Carbon Performance data, implementing Pydantic validation and generating carbon-intensity projections against 1.5°C sectoral benchmarks. Integrated ASCOR sovereign assessment framework (covering 85% of global GHG emissions and 90% of global GDP) with Model Context Protocol (MCP) and RAG features for intelligent data querying.
-           </p>
-        </div>
-        
-        <div class="project-card">
-            <h2><a href="https://github.com/Rsiddharth54/Exploring-how-economies-are-classified" target="_blank">Economic Classification Research</a></h2>
-            <p class="project-meta">London School of Economics | Certified Research</p>
-            <p class="project-description">
-                Published 72-page research paper analyzing economic classification methodologies using 7 thematic dimensions beyond GNI per capita. Developed multidimensional development index incorporating income, infrastructure, trade, human capital, environmental, institutional, and health factors. Revealed policy-relevant distinctions obscured by traditional GNI classification—identifying middle-income countries with robust human capital but weak infrastructure, and countries witsimilar GNI but vastly different development profiles.
-            </p>
-        </div>
-        
-        <div class="project-card">
-            <h2><a href="https://github.com/Rsiddharth54/Global_AI_Adoptions_Claude" target="_blank">Global AI Adoption Analysis</a></h2>
-            <p class="project-meta">Independent Research | 2024</p>
-            <p class="project-description">
-                Analyzed AI usage patterns across 200+ countries using Anthropic's Economic Index. Found emerging markets show 4-6 percentage point higher automation rates than developed markets—challenging assumptions abt AI adoption being concentrated in wealthy nations. Published comprehensive research report examining implications for global development, workforce transformation, and policy responses.
-            </p>
-        </div>
-        
-        <div class="project-card">
-            <h2>Stablecoin Policy Research</h2>
-            <p class="project-meta">In Progress | 2026</p>
-            <p class="project-description">
-                Developing comprehensive policy analysis of stablecoin regulation, focusing on the GENIUS Act and Treasury Department frameworks. Examining AML/KYC requirements, reserve transparency, systemic risk implications, and international regulatory coordination. Research bridges technical understanding of stablecoin mechanisms with policy implementation challenges.
-            </p>
-        </div>
-        
-        <h3>Other Work</h3>
-        
-        <div class="other-projects">
-            <div class="other-project">
-                <h4><a href="https://rsiddharth54.github.io/ecommerce-listing-classifier/" target="_blank">E-Commerce Listing Classifier</a></h4>
-                <p>Random Forest classifier for product quality assessment. 98% accuracy across 9K product titles with critical analysis of data leakage limitations.</p>
-            </div>
-            
-            <div class="other-project">
-                <h4><a href="https://github.com/Rsiddharth54" target="_blank">War Monitor (Ukraine)</a></h4>
-                <p>Multi-agent AI system combining OSINT data streams including ACLED, satellite imagery, government sources, and news using Chain-of-Debate framework.</p>
-            </div>
-            
-            <div class="other-project">
-                <h4><a href="https://github.com/Rsiddharth54/inflation_analysis" target="_blank">Economic Inflation Prediction</a></h4>
-                <p>ML models predicting historical inflation patterns and Bank of England interest rate changes using advanced time series analysis.</p>
-            </div>
-            
-            <div class="other-project">
-                <h4><a href="https://github.com/Rsiddharth54/luxemberg-stock-exchange" target="_blank">Luxembourg Stock Exchange API</a></h4>
-                <p>Python API integration for extracting and analyzing financial data with automated image processing.</p>
+        <!-- SCROLLABLE CONTENT -->
+        <div class="content-side">
+            <nav>
+                <a href="index.html" class="name">Rishi Siddharth</a>
+                <div class="links">
+                    <a href="index.html">Home</a>
+                    <a href="bio.html">Bio</a>
+                    <a href="experience.html">Experience</a>
+                    <a href="projects.html" class="active">Projects</a>
+                    <a href="writing.html">Writing</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+
+            <div class="main">
+                <h1>Projects & Research</h1>
+
+                <div class="project">
+                    <h2><a href="https://github.com/lse-ds205/tpi-apis" target="_blank">TPI Climate Assessment API</a></h2>
+                    <p class="meta">Transition Pathway Initiative · LSE · Jan–Apr 2025</p>
+                    <p class="desc">
+                        Co-developed FastAPI application providing programmatic access to TPI Centre's climate assessments covering 2,000+ publicly listed companies and 85 sovereign entities, supporting 156 global investors managing $87 trillion AUM. Built RESTful endpoints for Management Quality (23 indicators) and Carbon Performance data, implementing Pydantic validation and generating carbon-intensity projections against 1.5°C sectoral benchmarks. Integrated ASCOR sovereign assessment framework with MCP and RAG features for intelligent data querying.
+                    </p>
+                </div>
+
+                <div class="project">
+                    <h2><a href="https://github.com/Rsiddharth54/Exploring-how-economies-are-classified" target="_blank">Economic Classification Research</a></h2>
+                    <p class="meta">London School of Economics · Certified Research</p>
+                    <p class="desc">
+                        Co - published 72-page research paper analyzing economic classification methodologies using 7 thematic dimensions beyond GNI per capita. Developed multidimensional development index incorporating income, infrastructure, trade, human capital, environmental, institutional, and health factors. Revealed policy-relevant distinctions obscured by traditional GNI classification, identifying middle-income countries with robust human capital but weak infrastructure, and countries with similar GNI but vastly different development profiles.
+                    </p>
+                </div>
+
+                <div class="project">
+                    <h2><a href="https://github.com/Rsiddharth54/Global_AI_Adoptions_Claude" target="_blank">Global AI Adoption Analysis</a></h2>
+                    <p class="meta">Independent Research · 2024</p>
+                    <p class="desc">
+                        Analyzed AI usage patterns across 200+ countries using Anthropic's Economic Index. Found emerging markets show 4–6 percentage point higher automation rates than developed markets, challenging assumptions about AI adoption being concentrated in wealthy nations. Published comprehensive research report examining implications for global development, workforce transformation, and policy responses.
+                    </p>
+                </div>
+
+                <div class="project">
+                    <h2>Stablecoin Policy Research</h2>
+                    <p class="meta">In Progress · 2026</p>
+                    <p class="desc">
+                        Developing comprehensive policy analysis of stablecoin regulation, focusing on the GENIUS Act and Treasury Department frameworks. Examining AML/KYC requirements, reserve transparency, systemic risk implications, and international regulatory coordination. Research bridges technical understanding of stablecoin mechanisms with policy implementation challenges.
+                    </p>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <h2 class="section-title">Other Work</h2>
+
+                <div class="other-grid">
+                    <div class="other-card">
+                        <h4><a href="https://rsiddharth54.github.io/ecommerce-listing-classifier/" target="_blank">E-Commerce Classifier</a></h4>
+                        <p>Random Forest classifier for product quality assessment. 98% accuracy across 9K product titles with data leakage analysis.</p>
+                    </div>
+                    <div class="other-card">
+                        <h4><a href="https://github.com/Rsiddharth54" target="_blank">War Monitor (Ukraine)</a></h4>
+                        <p>Multi-agent AI system combining OSINT data streams using Chain-of-Debate framework.</p>
+                    </div>
+                    <div class="other-card">
+                        <h4><a href="https://github.com/Rsiddharth54/inflation_analysis" target="_blank">Inflation Prediction</a></h4>
+                        <p>ML models predicting inflation patterns and BoE interest rate changes using time series analysis.</p>
+                    </div>
+                    <div class="other-card">
+                        <h4><a href="https://github.com/Rsiddharth54/luxemberg-stock-exchange" target="_blank">Luxembourg Stock Exchange API</a></h4>
+                        <p>Python API integration for extracting and analyzing financial data.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </body>
 </html>
-
-

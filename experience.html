@@ -4,216 +4,250 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experience - Rishi Siddharth</title>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.7;
-            color: #333;
+            font-family: 'DM Sans', sans-serif;
+            color: #2c2c2c;
+            background: #f6f4f0;
         }
-        
+
+        /* SPLIT LAYOUT */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .photo-side {
+            width: 45%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .photo-side img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .content-side {
+            width: 55%;
+            margin-left: 45%;
+            min-height: 100vh;
+        }
+
         /* NAVIGATION */
         nav {
-            background: #fff;
-            padding: 30px 10%;
-            border-bottom: 1px solid #eee;
+            padding: 36px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        nav .logo {
-            font-size: 20px;
-            font-weight: 600;
-            color: #111;
+
+        nav .name {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: #2c2c2c;
+            text-decoration: none;
         }
-        
+
+        nav .name:hover {
+            color: #5a7a5a;
+        }
+
         nav .links {
             display: flex;
-            gap: 30px;
+            gap: 28px;
         }
-        
+
         nav a {
-            color: #333;
+            color: #666;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            padding: 10px 0;
-            border-bottom: 2px solid transparent;
-            transition: border-color 0.3s;
+            transition: color 0.3s;
         }
-        
-        nav a:hover {
-            border-bottom: 2px solid #0066cc;
+
+        nav a:hover,
+        nav a.active {
+            color: #2c2c2c;
         }
-        
-        /* CONTENT */
-        .content {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 100px 40px;
+
+        /* MAIN CONTENT */
+        .main {
+            padding: 60px 50px 100px;
+            max-width: 620px;
         }
-        
+
         h1 {
-            font-size: 48px;
-            margin-bottom: 60px;
-            color: #111;
-            font-weight: 600;
+            font-family: 'EB Garamond', serif;
+            font-size: 42px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
         }
-        
-        .experience-card {
-            margin-bottom: 80px;
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 40px;
-            padding-bottom: 80px;
-            border-bottom: 1px solid #eee;
+
+        /* EXPERIENCE CARDS */
+        .experience {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #e5e2dc;
         }
-        
-        .experience-card:last-child {
+
+        .experience:last-child {
             border-bottom: none;
         }
-        
-        .experience-content h2 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: #111;
+
+        .experience h2 {
+            font-family: 'EB Garamond', serif;
+            font-size: 22px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 6px;
         }
-        
-        .experience-meta {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 20px;
+
+        .experience .org {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 4px;
         }
-        
-        .experience-meta a {
-            color: #0066cc;
+
+        .experience .org a {
+            color: #5a7a5a;
             text-decoration: none;
+            border-bottom: 1px solid #5a7a5a40;
+            transition: border-color 0.3s;
         }
-        
-        .experience-meta a:hover {
-            text-decoration: underline;
+
+        .experience .org a:hover {
+            border-bottom-color: #5a7a5a;
         }
-        
-        .experience-description {
-            font-size: 16px;
-            line-height: 1.8;
+
+        .experience .dates {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .experience p.desc {
+            font-size: 15px;
+            line-height: 1.65;
             color: #555;
         }
-        
-        .experience-image img {
-            width: 100%;
-            border-radius: 8px;
-        }
-        
+
         /* RESPONSIVE */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .photo-side {
+                position: relative;
+                width: 100%;
+                height: 50vh;
+            }
+
+            .content-side {
+                width: 100%;
+                margin-left: 0;
+            }
+
             nav {
+                padding: 24px 24px;
                 flex-direction: column;
-                gap: 20px;
-                padding: 20px 5%;
+                gap: 16px;
             }
-            
+
             nav .links {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
+                gap: 20px;
             }
-            
-            .content {
-                padding: 60px 20px;
+
+            .main {
+                padding: 40px 24px 60px;
             }
-            
+
             h1 {
-                font-size: 36px;
-            }
-            
-            .experience-card {
-                grid-template-columns: 1fr;
+                font-size: 32px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- NAVIGATION -->
-    <nav>
-        <div class="logo">RISHI SIDDHARTH</div>
-        <div class="links">
-            <a href="index.html">HOME</a>
-            <a href="bio.html">BIO</a>
-            <a href="experience.html">EXPERIENCE</a>
-            <a href="projects.html">PROJECTS</a>
-            <a href="writing.html">WRITING</a>
-            <a href="contact.html">CONTACT</a>
+    <div class="layout">
+        <!-- FIXED PHOTO -->
+        <div class="photo-side">
+            <img src="images/TPI.png" alt="Conference presentation">
         </div>
-    </nav>
 
-    <!-- CONTENT -->
-    <div class="content">
-        <h1>Experience</h1>
-        
-        <div class="experience-card">
-            <div class="experience-content">
-                <h2>Data Science Researcher</h2>
-                <p class="experience-meta">
-                    <a href="https://www.transitionpathwayinitiative.org/" target="_blank">Transition Pathway Initiative</a> - London School of Economics<br>
-                    January 2025 - April 2025 • London, UK
-                </p>
-                <p class="experience-description">
-                    Co-developed FastAPI application providing programmatic access to TPI Centre's climate assessments covering 2,000+ publicly listed companies and 85 sovereign entities, supporting 156 global investors managin$87 trillion AUM. Built RESTful endpoints for Management Quality (23 indicators) and Carbon Performance data, implementing Pydantic validation and generating carbon-intensity projections against 1.5°C sectoral benchmarks. Integrated ASCOR sovereign assessment framework (covering 85% of global GHG emissions and 90% of global GDP) with Model Context Protocol (MCP) and RAG features for intelligent data querying. Collaborated with 15-member DS205 team under Dr. Jon Cardoso-Silva and TPI Centre staff, applying test-driven development and CI/CD pipelines to deliver production-grade codebase serving real-world investor use cases.
-                </p>
-            </div>
-            <div class="experience-image">
-                <img src="images/conference.png" alt=Conference presentation">
-            </div>
-        </div>
-        
-        <div class="experience-card">
-            <div class="experience-content">
-                <h2>Product Intern</h2>
-                <p class="experience-meta">
-                    <a href="https://www.intermezzo.ai/" target="_blank">Intermezzo.ai</a><br>
-                    January 2024 - Present • Remote
-                </p>
-                <p class="experience-description">
-                  Fine-tuned large language models for international tax compliance automation, achieving 99% accuracy in entity recognition across OECD, HMRC, and Singapore CPF regulatory frameworks. Analyzed complex international tax requirements and integrated compliance rules into Gross-to-Net API pipeline. Worked directly with product and engineering teams to translate regulatory requirements into technical specifications, ensuring system accuracy across multiple jurisdictions.
-                </p>
-            </div>
-            <div class="experience-image">
-                <img src="images/pentagon_photo.jpeg" alt="Pentagon visit">
-            </div>
-        </div>
-        
-        <div class="experience-card">
-            <div class="experience-content">
-                <h2>Analyst - AI Health Tech Consulting</h2>
-                <p class="experience-meta">
-                    LSE Castore Consulting<br>
-                    December 2024 - May 2025 • London, UK
-                </p>
-                <p class="experience-description">
-                    Built Series A pricing models and conducted competitive analysis across 15+ AI health tech firms for client fundraising strategy. Delivered comprehensive insights on EU and Indonesia market expansion opportunities, healthcare AI adoption trends, and regulatory dynamics. Synthesized market rearch and financial modeling to inform go-to-market strategy and valuation positioning.
-                </p>
-            </div>
-        </div>
-        
-        <div class="experience-card">
-            <div class="experience-content">
-                <h2>Data Science Research Intern</h2>
-                <p class="experience-meta">
-                    <a href="https://www.georgetown.edu/" target="_blank">Georgetown University REU</a> (NSF/NSA Sponsored)<br>
-                    May 2024 - August 2024 • Washington, DC
-                </p>
-                <p class="experience-description">
-                    Developed NLP-based machine learning models to assess geopolitical risk from legislative text, working under NSF and NSA sponsorship. Presented research findings toSF program officers and members of the intelligence community. Applied advanced natural language processing techniques to quantify policy uncertainty and predict geopolitical outcomes. Achieved runner-up placement in undergraduate research competition at Tufts University, competing against 50+ research teams nationwide.
-                </p>
+        <!-- SCROLLABLE CONTENT -->
+        <div class="content-side">
+            <nav>
+                <a href="index.html" class="name">Rishi Siddharth</a>
+                <div class="links">
+                    <a href="index.html">Home</a>
+                    <a href="bio.html">Bio</a>
+                    <a href="experience.html" class="active">Experience</a>
+                    <a href="projects.html">Projects</a>
+                    <a href="writing.html">Writing</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+
+            <div class="main">
+                <h1>Experience</h1>
+
+                <div class="experience">
+                    <h2>Data Science Researcher</h2>
+                    <p class="org"><a href="https://www.transitionpathwayinitiative.org/" target="_blank">Transition Pathway Initiative</a>, London School of Economics</p>
+                    <p class="dates">January 2025 – April 2025 · London, UK</p>
+                    <p class="desc">
+                        Co-developed FastAPI application providing programmatic access to TPI Centre's climate assessments covering 2,000+ publicly listed companies and 85 sovereign entities, supporting 156 global investors managing $87 trillion AUM. Built RESTful endpoints for Management Quality (23 indicators) and Carbon Performance data, implementing Pydantic validation and generating carbon-intensity projections against 1.5°C sectoral benchmarks. Integrated ASCOR sovereign assessment framework with Model Context Protocol (MCP) and RAG features for intelligent data querying.
+                    </p>
+                </div>
+
+                <div class="experience">
+                    <h2>Product Intern</h2>
+                    <p class="org"><a href="https://www.intermezzo.ai/" target="_blank">Intermezzo.ai</a></p>
+                    <p class="dates">January 2024 – Present · Remote</p>
+                    <p class="desc">
+                        Fine-tuned large language models for international tax compliance automation, achieving 99% accuracy in entity recognition across OECD, HMRC, and Singapore CPF regulatory frameworks. Analyzed complex international tax requirements and integrated compliance rules into Gross-to-Net API pipeline. Worked directly with product and engineering teams to translate regulatory requirements into technical specifications across multiple jurisdictions.
+                    </p>
+                </div>
+
+                <div class="experience">
+                    <h2>Analyst, AI Health Tech Consulting</h2>
+                    <p class="org">LSE Castore Consulting</p>
+                    <p class="dates">December 2024 – May 2025 · London, UK</p>
+                    <p class="desc">
+                        Built Series A pricing models and conducted competitive analysis across 15+ AI health tech firms for client fundraising strategy. Delivered insights on EU and Indonesia market expansion opportunities, healthcare AI adoption trends, and regulatory dynamics. Synthesized market research and financial modeling to inform go-to-market strategy and valuation positioning.
+                    </p>
+                </div>
+
+                <div class="experience">
+                    <h2>Data Science Research Intern</h2>
+                    <p class="org"><a href="https://www.georgetown.edu/" target="_blank">Georgetown University REU</a> (NSF/NSA Sponsored)</p>
+                    <p class="dates">May 2024 – August 2024 · Washington, DC</p>
+                    <p class="desc">
+                        Developed NLP-based machine learning models to assess geopolitical risk from legislative text, working under NSF and NSA sponsorship. Presented research findings to NSF program officers and members of the intelligence community. Applied advanced NLP techniques to quantify policy uncertainty and predict geopolitical outcomes. Achieved runner-up placement in undergraduate research competition at Tufts University, competing against 50+ research teams nationwide.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
