@@ -4,262 +4,418 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experience - Rishi Siddharth</title>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #f6f4f0;
+            --text: #2c2c2c;
+            --text-secondary: #555;
+            --text-muted: #999;
+            --accent: #5a7a5a;
+            --accent-dim: #5a7a5a40;
+            --border: #e5e2dc;
+            --toggle-bg: #e5e2dc;
+            --node-color: 90, 122, 90;
         }
+
+        [data-theme="dark"] {
+            --bg: #111111;
+            --text: #e8e6e1;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555;
+            --accent: #7fa87f;
+            --accent-dim: #7fa87f40;
+            --border: #2a2a2a;
+            --toggle-bg: #2a2a2a;
+            --node-color: 127, 168, 127;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'DM Sans', sans-serif;
-            color: #2c2c2c;
-            background: #f6f4f0;
+            color: var(--text);
+            background: var(--bg);
+            transition: background 0.4s, color 0.4s;
+            overflow-x: hidden;
         }
 
-        /* SPLIT LAYOUT */
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .photo-side {
-            width: 45%;
+        #constellation {
             position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            overflow: hidden;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            opacity: 0.25;
+            z-index: 0;
         }
 
-        .photo-side img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            display: block;
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 80px 40px 120px;
         }
 
-        .content-side {
-            width: 55%;
-            margin-left: 45%;
-            min-height: 100vh;
-        }
-
-        /* NAVIGATION */
-        nav {
-            padding: 36px 50px;
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 80px;
         }
 
-        nav .name {
+        .header a {
             font-family: 'EB Garamond', serif;
             font-size: 18px;
             font-weight: 500;
             letter-spacing: 0.5px;
-            color: #2c2c2c;
+            color: var(--text);
             text-decoration: none;
         }
 
-        nav .name:hover {
-            color: #5a7a5a;
+        .header a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            width: 44px; height: 24px;
+            background: var(--toggle-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px; cursor: pointer;
+            position: relative; transition: background 0.3s;
         }
 
-        nav .links {
-            display: flex;
-            gap: 28px;
+        .theme-toggle::after {
+            content: ''; width: 18px; height: 18px;
+            background: var(--accent); border-radius: 50%;
+            position: absolute; top: 2px; left: 2px;
+            transition: transform 0.3s;
         }
 
-        nav a {
-            color: #666;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-        }
-
-        nav a:hover,
-        nav a.active {
-            color: #2c2c2c;
-        }
-
-        /* MAIN CONTENT */
-        .main {
-            padding: 60px 50px 100px;
-            max-width: 620px;
-        }
+        [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
 
         h1 {
             font-family: 'EB Garamond', serif;
-            font-size: 42px;
+            font-size: 44px;
             font-weight: 500;
-            color: #1a1a1a;
-            margin-bottom: 40px;
+            color: var(--text);
             letter-spacing: -0.5px;
+            margin-bottom: 12px;
         }
 
-        /* EXPERIENCE CARDS */
-        .experience {
-            margin-bottom: 40px;
-            padding-bottom: 40px;
-            border-bottom: 1px solid #e5e2dc;
-        }
-
-        .experience:last-child {
-            border-bottom: none;
-        }
-
-        .experience h2 {
-            font-family: 'EB Garamond', serif;
-            font-size: 22px;
-            font-weight: 500;
-            color: #1a1a1a;
-            margin-bottom: 6px;
-        }
-
-        .experience .org {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 4px;
-        }
-
-        .experience .org a {
-            color: #5a7a5a;
-            text-decoration: none;
-            border-bottom: 1px solid #5a7a5a40;
-            transition: border-color 0.3s;
-        }
-
-        .experience .org a:hover {
-            border-bottom-color: #5a7a5a;
-        }
-
-        .experience .dates {
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
-            color: #999;
-            margin-bottom: 14px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 60px;
+        }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 120px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 95px;
+            top: 8px;
+            bottom: 0;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .timeline-entry {
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .timeline-entry:last-child { margin-bottom: 0; }
+
+        .timeline-entry::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 8px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .timeline-year {
+            position: absolute;
+            left: -120px;
+            top: 2px;
+            width: 80px;
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
             letter-spacing: 0.3px;
         }
 
-        .experience p.desc {
-            font-size: 15px;
-            line-height: 1.65;
-            color: #555;
+        .timeline-entry h2 {
+            font-family: 'EB Garamond', serif;
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 4px;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 900px) {
-            .layout {
-                flex-direction: column;
-            }
+        .timeline-org {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
 
-            .photo-side {
+        .timeline-org a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .timeline-org a:hover {
+            text-decoration: underline;
+        }
+
+        .timeline-location {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+            margin-bottom: 12px;
+        }
+
+        .timeline-desc {
+            font-family: 'EB Garamond', serif;
+            font-size: 17px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .timeline-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .timeline-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 3px 10px;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 60px;
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover { color: var(--accent); }
+
+        @media (max-width: 600px) {
+            .page { padding: 40px 20px 80px; }
+            h1 { font-size: 34px; }
+            .timeline { padding-left: 0; }
+            .timeline::before { display: none; }
+            .timeline-entry::before { display: none; }
+            .timeline-year {
                 position: relative;
-                width: 100%;
-                height: 50vh;
-            }
-
-            .content-side {
-                width: 100%;
-                margin-left: 0;
-            }
-
-            nav {
-                padding: 24px 24px;
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            nav .links {
-                gap: 20px;
-            }
-
-            .main {
-                padding: 40px 24px 60px;
-            }
-
-            h1 {
-                font-size: 32px;
+                left: 0;
+                text-align: left;
+                width: auto;
+                margin-bottom: 6px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="layout">
-        <!-- FIXED PHOTO -->
-        <div class="photo-side">
-            <img src="images/chess.jpeg" alt="Conference presentation">
+    <canvas id="constellation"></canvas>
+
+    <div class="page">
+        <div class="header">
+            <a href="index.html">Rishi Siddharth</a>
+            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"></div>
         </div>
 
-        <!-- SCROLLABLE CONTENT -->
-        <div class="content-side">
-            <nav>
-                <a href="index.html" class="name">Rishi Siddharth</a>
-                <div class="links">
-                    <a href="index.html">Home</a>
-                    <a href="bio.html">Bio</a>
-                    <a href="experience.html" class="active">Experience</a>
-                    <a href="projects.html">Projects</a>
-                    <a href="writing.html">Writing</a>
-                    <a href="contact.html">Contact</a>
-                </div>
-            </nav>
+        <h1>Experience</h1>
+        <p class="subtitle">the last few years</p>
 
-            <div class="main">
-                <h1>Experience</h1>
-
-                <div class="experience">
-                    <h2>Data Sciencist</h2>
-                    <p class="org"><a href="https://www.nasa.gov/humans-in-space/artemis/" target="_blank">NASA Artemis</a>, American University Physics Department</p>
-                    <p class="dates">January 2026 –  Whenever they launch · Washgington, D
-                    </p>
-                    <p class="desc">
-                        Helping humans to go to the moon for the first time in 50 years. Selected through NASA’s RFI as a collaborator to support passive one-way Doppler tracking of Orion spacecraft S-band signals in cislunar space, contributing to data validation efforts for NASA’s crewed lunar mission. Computed Doppler shifts and processed receive frequency and phase count measurements in Python, formatting outputs into CCSDS-compliant Tracking Data Messages (TDM) with milliHertz-level precision for comparison against Deep Space Network benchmarks.
-                    </p>
-                </div>
-
-                <div class="experience">
-                    <h2>Data Science Researcher</h2>
-                    <p class="org"><a href="https://www.transitionpathwayinitiative.org/" target="_blank">Transition Pathway Initiative</a>, London School of Economics</p>
-                    <p class="dates">January 2025 – April 2025 · London, UK</p>
-                    <p class="desc">
-                        Co-developed FastAPI application providing programmatic access to TPI Centre's climate assessments covering 2,000+ publicly listed companies and 85 sovereign entities, supporting 156 global investors managing $87 trillion AUM. Built RESTful endpoints for Management Quality (23 indicators) and Carbon Performance data, implementing Pydantic validation and generating carbon-intensity projections against 1.5°C sectoral benchmarks. Integrated ASCOR sovereign assessment framework with Model Context Protocol (MCP) and RAG features for intelligent data querying.
-                    </p>
-                </div>
-
-                <div class="experience">
-                    <h2>Product Intern</h2>
-                    <p class="org"><a href="https://www.intermezzo.ai/" target="_blank">Intermezzo.ai</a></p>
-                    <p class="dates">January 2024 – Present · Remote</p>
-                    <p class="desc">
-                        Fine-tuned large language models for international tax compliance automation, achieving 99% accuracy in entity recognition across OECD, HMRC, and Singapore CPF regulatory frameworks. Analyzed complex international tax requirements and integrated compliance rules into Gross-to-Net API pipeline. Worked directly with product and engineering teams to translate regulatory requirements into technical specifications across multiple jurisdictions.
-                    </p>
-                </div>
-
-                <div class="experience">
-                    <h2>Analyst, AI Health Tech Consulting</h2>
-                    <p class="org">LSE Castore Consulting</p>
-                    <p class="dates">December 2024 – May 2025 · London, UK</p>
-                    <p class="desc">
-                        Built Series A pricing models and conducted competitive analysis across 15+ AI health tech firms for client fundraising strategy. Delivered insights on EU and Indonesia market expansion opportunities, healthcare AI adoption trends, and regulatory dynamics. Synthesized market research and financial modeling to inform go-to-market strategy and valuation positioning.
-                    </p>
-                </div>
-
-                <div class="experience">
-                    <h2>Data Science Research Intern</h2>
-                    <p class="org"><a href="https://www.georgetown.edu/" target="_blank">Georgetown University REU</a> (NSF/NSA Sponsored)</p>
-                    <p class="dates">May 2024 – August 2024 · Washington, DC</p>
-                    <p class="desc">
-                        Developed NLP-based machine learning models to assess geopolitical risk from legislative text, working under NSF and NSA sponsorship. Presented research findings to NSF program officers and members of the intelligence community. Applied advanced NLP techniques to quantify policy uncertainty and predict geopolitical outcomes. Achieved runner-up placement in undergraduate research competition at Tufts University, competing against 50+ research teams nationwide.
-                    </p>
+        <div class="timeline">
+            <div class="timeline-entry">
+                <div class="timeline-year">2025 -</div>
+                <h2>Satellite Data Analyst</h2>
+                <div class="timeline-org"><a href="https://www.nasa.gov/mission/artemis-ii/" target="_blank">NASA Artemis II Mission</a></div>
+                <div class="timeline-location">Washington, DC</div>
+                <p class="timeline-desc">
+                    I got selected to work with AU's physical department, to help format and process satellite data for the Artemis II mission. This historic mission, and supporting NASA's return to crewed lunar exploration is a dream come true. I work with Doppler tracking data and mission telemetry systems.
+                </p>
+                <div class="timeline-tags">
+                    <span class="timeline-tag">satellite data</span>
+                    <span class="timeline-tag">python</span>
+                    <span class="timeline-tag">doppler tracking</span>
                 </div>
             </div>
+
+            <div class="timeline-entry">
+                <div class="timeline-year">2025</div>
+                <h2>Data Science Researcher</h2>
+                <div class="timeline-org"><a href="https://www.transitionpathwayinitiative.org/" target="_blank">Transition Pathway Initiative</a>, LSE</div>
+                <div class="timeline-location">London, UK / Jan - May 2025</div>
+                <p class="timeline-desc">
+                    This work was throgh the data science department in partnership with the transition pathway, a research center at LSE. I  Co-developed FastAPI application providing programmatic access to climate assessments covering 2,000+ companies and 85 sovereign entities. Built RESTful endpoints for carbon performance data with MCP and RAG features for intelligent querying.
+                </p>
+                <div class="timeline-tags">
+                    <span class="timeline-tag">fastapi</span>
+                    <span class="timeline-tag">climate data</span>
+                    <span class="timeline-tag">mcp</span>
+                    <span class="timeline-tag">rag</span>
+                </div>
+            </div>
+
+            <div class="timeline-entry">
+                <div class="timeline-year">2024-25</div>
+                <h2>Year Abroad</h2>
+                <div class="timeline-org"><a href="https://www.lse.ac.uk/" target="_blank">London School of Economics</a></div>
+                <div class="timeline-location">London, UK / Sept 2024 - May 2025</div>
+                <p class="timeline-desc">
+                    Coursework: Advanced Data Manipulation, Probability, Distribution Theory and Inference, Economics in Public Policy, and Data Science for Social Scientists.
+                    Outside Coursework: I helped found the AI club at LSE, adviced the faculty to partner with Anthropic.AI, and was in Castore Consutling as an analyst. I was also a member of the blockchain club and played soccer on LSE's team.
+                </p>
+                <div class="timeline-tags">
+                    <span class="timeline-tag">data science</span>
+                    <span class="timeline-tag">economics</span>
+                    <span class="timeline-tag">research</span>
+                </div>
+            </div>
+
+            <div class="timeline-entry">
+                <div class="timeline-year">2024</div>
+                <h2>Data Science Research Intern</h2>
+                <div class="timeline-org"><a href="https://www.georgetown.edu/" target="_blank">Georgetown University REU</a> (NSF/NSA)</div>
+                <div class="timeline-location">Washington, DC / May - Sept 2024</div>
+                <p class="timeline-desc">
+                    REU through Georgetown University, NSF, and NSA. Developed NLP models to assess geopolitical risk from legislative text. Presented findings to NSF program officers and the intelligence community. Runner-up at Tufts research competition against 50+ teams.
+                </p>
+                <div class="timeline-tags">
+                    <span class="timeline-tag">nlp</span>
+                    <span class="timeline-tag">geopolitical risk</span>
+                    <span class="timeline-tag">nsf/nsa</span>
+                </div>
+            </div>
+
+            <div class="timeline-entry">
+                <div class="timeline-year">2024 -</div>
+                <h2>Product Intern</h2>
+                <div class="timeline-org"><a href="https://www.intermezzo.ai/" target="_blank">Intermezzo.ai</a></div>
+                <div class="timeline-location">Remote / Jan 2024 - Present</div>
+                <p class="timeline-desc">
+                    Fine-tuned LLMs for international tax compliance automation. 99% accuracy in entity recognition across OECD, HMRC, and Singapore CPF frameworks. Integrated compliance rules into Gross-to-Net API pipeline.
+                </p>
+                <div class="timeline-tags">
+                    <span class="timeline-tag">llm fine-tuning</span>
+                    <span class="timeline-tag">tax compliance</span>
+                    <span class="timeline-tag">nlp</span>
+                </div>
+            </div>
+
+            <div class="timeline-entry">
+                <div class="timeline-year">2022</div>
+                <h2>Undergraduate in Data Science and International Business. College of Arts and Sciences and Kogod School of Business</h2>
+                <div class="timeline-org"><a href="https://www.american.edu/" target="_blank">American University</a>, College of Arts and Sciences</div>
+                <div class="timeline-location">Washington, DC</div>
+                <p class="timeline-desc">
+                    Graduating May 2026.
+                </p>
+            </div>
         </div>
+
+        <a href="index.html" class="back-link">&larr; Back home</a>
     </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+        const canvas = document.getElementById('constellation');
+        const ctx = canvas.getContext('2d');
+        let W, H;
+        const nodes = [];
+        const NUM = 50;
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            W = canvas.width = window.innerWidth * dpr;
+            H = canvas.height = window.innerHeight * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        for (let i = 0; i < NUM; i++) {
+            nodes.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                vx: (Math.random() - 0.5) * 0.25,
+                vy: (Math.random() - 0.5) * 0.25,
+                r: Math.random() * 2 + 1
+            });
+        }
+
+        function drawConstellation() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            ctx.clearRect(0, 0, w, h);
+
+            const style = getComputedStyle(document.documentElement);
+            const rgb = style.getPropertyValue('--node-color').trim();
+
+            for (let i = 0; i < NUM; i++) {
+                const a = nodes[i];
+                a.x += a.vx;
+                a.y += a.vy;
+                if (a.x < 0 || a.x > w) a.vx *= -1;
+                if (a.y < 0 || a.y > h) a.vy *= -1;
+
+                for (let j = i + 1; j < NUM; j++) {
+                    const b = nodes[j];
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 140) {
+                        ctx.beginPath();
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.18 * (1 - dist / 140)) + ')';
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+
+                ctx.beginPath();
+                ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(' + rgb + ', 0.3)';
+                ctx.fill();
+            }
+            requestAnimationFrame(drawConstellation);
+        }
+        drawConstellation();
+    </script>
 </body>
 </html>
