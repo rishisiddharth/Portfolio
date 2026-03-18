@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books - Rishi Siddharth</title>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f6f4f0;
+            --text: #2c2c2c;
+            --text-secondary: #555;
+            --text-muted: #999;
+            --accent: #5a7a5a;
+            --accent-dim: #5a7a5a40;
+            --border: #e5e2dc;
+            --toggle-bg: #e5e2dc;
+            --node-color: 90, 122, 90;
+            --card-bg: #ffffff;
+            --reading-glow: rgba(90, 122, 90, 0.3);
+        }
+
+        [data-theme="dark"] {
+            --bg: #111111;
+            --text: #e8e6e1;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555;
+            --accent: #7fa87f;
+            --accent-dim: #7fa87f40;
+            --border: #2a2a2a;
+            --toggle-bg: #2a2a2a;
+            --node-color: 127, 168, 127;
+            --card-bg: #1a1a1a;
+            --reading-glow: rgba(127, 168, 127, 0.25);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            transition: background 0.4s, color 0.4s;
+            overflow-x: hidden;
+        }
+
+        #constellation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 80px 40px 120px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .header a {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px; font-weight: 500;
+            letter-spacing: 0.5px; color: var(--text);
+            text-decoration: none;
+        }
+
+        .header a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            width: 44px; height: 24px;
+            background: var(--toggle-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px; cursor: pointer;
+            position: relative; transition: background 0.3s;
+        }
+
+        .theme-toggle::after {
+            content: ''; width: 18px; height: 18px;
+            background: var(--accent); border-radius: 50%;
+            position: absolute; top: 2px; left: 2px;
+            transition: transform 0.3s;
+        }
+
+        [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
+
+        h1 {
+            font-family: 'EB Garamond', serif;
+            font-size: 44px; font-weight: 500;
+            color: var(--text); letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px; color: var(--text-muted);
+            letter-spacing: 0.5px; margin-bottom: 60px;
+        }
+
+        .section-label {
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 28px;
+        }
+
+        .divider {
+            width: 100%; height: 1px;
+            background: var(--border);
+            margin: 60px 0;
+        }
+
+        /* BOOK NETWORK CANVAS */
+        #booknet {
+            width: 100%;
+            height: 360px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 60px;
+            cursor: grab;
+        }
+
+        #booknet:active { cursor: grabbing; }
+
+        /* BOOK CARDS */
+        .book-card {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: all 0.3s;
+            background: var(--card-bg);
+        }
+
+        .book-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .book-card.reading {
+            border-left: 3px solid var(--accent);
+            box-shadow: 0 0 20px var(--reading-glow);
+        }
+
+        .book-emoji {
+            font-size: 32px;
+            flex-shrink: 0;
+            width: 40px;
+            text-align: center;
+            padding-top: 2px;
+        }
+
+        .book-info { flex: 1; }
+
+        .book-title {
+            font-family: 'EB Garamond', serif;
+            font-size: 19px; font-weight: 500;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .book-author {
+            font-size: 13px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .book-summary {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .book-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .book-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .reading-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--accent);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reading-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover { color: var(--accent); }
+
+        @media (max-width: 600px) {
+            .page { padding: 40px 20px 80px; }
+            h1 { font-size: 34px; }
+            .book-card { flex-direction: column; gap: 12px; }
+            .book-emoji { width: auto; text-align: left; }
+            #booknet { height: 280px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="constellation"></canvas>
+
+    <div class="page">
+        <div class="header">
+            <a href="index.html">Rishi Siddharth</a>
+            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"></div>
+        </div>
+
+        <h1>Books</h1>
+        <p class="subtitle">what i'm reading and things i read recently</p>
+
+        <canvas id="booknet"></canvas>
+
+        <p class="section-label"><span class="reading-badge">Currently reading</span></p>
+
+        <div class="book-card reading">
+            <div class="book-emoji">&#128176;</div>
+            <div class="book-info">
+                <div class="book-title">Money: The True Story of a Made-Up Thing</div>
+                <div class="book-author">Jacob Goldstein</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card reading">
+            <div class="book-emoji">&#129302;</div>
+            <div class="book-info">
+                <div class="book-title">AI 2041: Ten Visions for Our Future</div>
+                <div class="book-author">Kai-Fu Lee & Chen Qiufan</div>
+                
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p class="section-label">Finished</p>
+
+        <div class="book-card">
+            <div class="book-emoji">&#127754;</div>
+            <div class="book-info">
+                <div class="book-title">The Coming Wave</div>
+                <div class="book-author">Mustafa Suleyman</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#129504;</div>
+            <div class="book-info">
+                <div class="book-title">A Brief History of Intelligence</div>
+                <div class="book-author">Max S. Bennett</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#128187;</div>
+            <div class="book-info">
+                <div class="book-title">The Nvidia Way</div>
+                <div class="book-author">Tae Kim</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#128640;</div>
+            <div class="book-info">
+                <div class="book-title">Elon Musk</div>
+                <div class="book-author">Walter Isaacson</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#128161;</div>
+            <div class="book-info">
+                <div class="book-title">Impromptu</div>
+                <div class="book-author">Reid Hoffman</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#127974;</div>
+            <div class="book-info">
+                <div class="book-title">The Richest Man in Babylon</div>
+                <div class="book-author">George S. Clason</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#9883;&#65039;</div>
+            <div class="book-info">
+                <div class="book-title">The Cartoon Guide to Physics</div>
+                <div class="book-author">Larry Gonick</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#127756;</div>
+            <div class="book-info">
+                <div class="book-title">The Quantum World</div>
+                <div class="book-author">Kenneth W. Ford</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#128214;</div>
+            <div class="book-info">
+                <div class="book-title">Tintin</div>
+                <div class="book-author">Herg&eacute;</div>
+                
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-emoji">&#128165;</div>
+            <div class="book-info">
+                <div class="book-title">Invincible, Vol. 1</div>
+                <div class="book-author">Robert Kirkman</div>
+                
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">&larr; Back home</a>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            drawNet();
+        }
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+        // CONSTELLATION
+        const cCanvas = document.getElementById('constellation');
+        const cCtx = cCanvas.getContext('2d');
+        const cNodes = [];
+        const CNUM = 80;
+
+        function cResize() {
+            const dpr = window.devicePixelRatio || 1;
+            cCanvas.width = window.innerWidth * dpr;
+            cCanvas.height = window.innerHeight * dpr;
+            cCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        window.addEventListener('resize', cResize);
+        cResize();
+
+        for (let i = 0; i < CNUM; i++) {
+            cNodes.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                r: Math.random() * 2.5 + 1
+            });
+        }
+
+        function drawConst() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            cCtx.clearRect(0, 0, w, h);
+            const style = getComputedStyle(document.documentElement);
+            const rgb = style.getPropertyValue('--node-color').trim();
+
+            for (let i = 0; i < CNUM; i++) {
+                const a = cNodes[i];
+                a.x += a.vx; a.y += a.vy;
+                if (a.x < 0 || a.x > w) a.vx *= -1;
+                if (a.y < 0 || a.y > h) a.vy *= -1;
+                for (let j = i + 1; j < CNUM; j++) {
+                    const b = cNodes[j];
+                    const dist = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+                    if (dist < 160) {
+                        cCtx.beginPath(); cCtx.moveTo(a.x, a.y); cCtx.lineTo(b.x, b.y);
+                        cCtx.strokeStyle = 'rgba(' + rgb + ',' + (0.25 * (1 - dist / 160)) + ')';
+                        cCtx.lineWidth = 1; cCtx.stroke();
+                    }
+                }
+                cCtx.beginPath(); cCtx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+                cCtx.fillStyle = 'rgba(' + rgb + ', 0.45)'; cCtx.fill();
+            }
+            requestAnimationFrame(drawConst);
+        }
+        drawConst();
+
+        // BOOK NETWORK
+        const bookCanvas = document.getElementById('booknet');
+        const bCtx = bookCanvas.getContext('2d');
+
+        const books = [
+            { label: 'Money', x: 0, y: 0, cat: 'finance' },
+            { label: 'AI 2041', x: 0, y: 0, cat: 'ai' },
+            { label: 'Coming Wave', x: 0, y: 0, cat: 'ai' },
+            { label: 'Brief Hist.\nof Intelligence', x: 0, y: 0, cat: 'ai' },
+            { label: 'Nvidia Way', x: 0, y: 0, cat: 'tech' },
+            { label: 'Elon Musk', x: 0, y: 0, cat: 'tech' },
+            { label: 'Impromptu', x: 0, y: 0, cat: 'ai' },
+            { label: 'Richest Man\nin Babylon', x: 0, y: 0, cat: 'finance' },
+            { label: 'Physics', x: 0, y: 0, cat: 'science' },
+            { label: 'Quantum', x: 0, y: 0, cat: 'science' },
+            { label: 'Tintin', x: 0, y: 0, cat: 'comics' },
+            { label: 'Invincible', x: 0, y: 0, cat: 'comics' },
+        ];
+
+        const connections = [
+            [0, 7], [0, 1], [1, 2], [1, 3], [2, 6], [2, 3],
+            [4, 5], [4, 2], [5, 6], [6, 1], [3, 9], [8, 9],
+            [10, 11], [7, 0], [5, 4], [3, 6]
+        ];
+
+        const catColors = {
+            finance: { light: '#5a7a5a', dark: '#7fa87f' },
+            ai: { light: '#4a6a9a', dark: '#7aa0cf' },
+            tech: { light: '#9a6a4a', dark: '#cf9a6a' },
+            science: { light: '#6a5a9a', dark: '#9a8acf' },
+            comics: { light: '#9a4a6a', dark: '#cf7a9a' }
+        };
+
+        function initBookPositions() {
+            const r = bookCanvas.getBoundingClientRect();
+            const w = r.width; const h = r.height;
+            const cx = w / 2; const cy = h / 2;
+            books.forEach((b, i) => {
+                const angle = (i / books.length) * Math.PI * 2 - Math.PI / 2;
+                const radius = Math.min(w, h) * 0.35;
+                b.x = cx + Math.cos(angle) * radius + (Math.random() - 0.5) * 40;
+                b.y = cy + Math.sin(angle) * radius + (Math.random() - 0.5) * 40;
+                b.vx = (Math.random() - 0.5) * 0.15;
+                b.vy = (Math.random() - 0.5) * 0.15;
+            });
+        }
+
+        function drawNet() {
+            const r = bookCanvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            bookCanvas.width = r.width * dpr;
+            bookCanvas.height = r.height * dpr;
+            bCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            const w = r.width; const h = r.height;
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+            bCtx.clearRect(0, 0, w, h);
+
+            connections.forEach(([a, b]) => {
+                bCtx.beginPath();
+                bCtx.moveTo(books[a].x, books[a].y);
+                bCtx.lineTo(books[b].x, books[b].y);
+                bCtx.strokeStyle = isDark ? 'rgba(127,168,127,0.15)' : 'rgba(90,122,90,0.12)';
+                bCtx.lineWidth = 1;
+                bCtx.stroke();
+            });
+
+            books.forEach(b => {
+                b.x += b.vx; b.y += b.vy;
+                if (b.x < 40 || b.x > w - 40) b.vx *= -1;
+                if (b.y < 30 || b.y > h - 30) b.vy *= -1;
+
+                const col = catColors[b.cat];
+                const c = isDark ? col.dark : col.light;
+
+                bCtx.beginPath();
+                bCtx.arc(b.x, b.y, 5, 0, Math.PI * 2);
+                bCtx.fillStyle = c;
+                bCtx.fill();
+
+                const lines = b.label.split('\n');
+                bCtx.font = '11px "DM Sans", sans-serif';
+                bCtx.fillStyle = isDark ? '#ccc' : '#444';
+                bCtx.textAlign = 'center';
+                lines.forEach((line, i) => {
+                    bCtx.fillText(line, b.x, b.y + 18 + i * 13);
+                });
+            });
+
+            requestAnimationFrame(drawNet);
+        }
+
+        function bResize() { initBookPositions(); }
+        window.addEventListener('resize', bResize);
+        initBookPositions();
+        drawNet();
+    </script>
+</body>
+</html>
