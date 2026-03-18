@@ -46,17 +46,15 @@
             overflow-x: hidden;
         }
 
-        /* CONSTELLATION BG */
         #constellation {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             pointer-events: none;
-            opacity: 0.25;
+            opacity: 0.4;
             z-index: 0;
         }
 
-        /* CONTENT */
         .page {
             position: relative;
             z-index: 1;
@@ -65,7 +63,6 @@
             padding: 80px 40px 120px;
         }
 
-        /* HEADER */
         .header {
             display: flex;
             justify-content: space-between;
@@ -75,10 +72,8 @@
 
         .header .name {
             font-family: 'EB Garamond', serif;
-            font-size: 18px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            color: var(--text);
+            font-size: 18px; font-weight: 500;
+            letter-spacing: 0.5px; color: var(--text);
         }
 
         .theme-toggle {
@@ -98,72 +93,69 @@
 
         [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
 
-        /* HERO */
         h1 {
             font-family: 'EB Garamond', serif;
-            font-size: 52px;
-            font-weight: 500;
-            color: var(--text);
-            letter-spacing: -1px;
-            margin-bottom: 12px;
-            line-height: 1.1;
+            font-size: 52px; font-weight: 500;
+            color: var(--text); letter-spacing: -1px;
+            margin-bottom: 12px; line-height: 1.1;
         }
 
         .tagline {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-            margin-bottom: 48px;
+            font-size: 13px; color: var(--text-muted);
+            letter-spacing: 0.5px; margin-bottom: 48px;
         }
 
-        /* BIO */
         .bio {
             font-family: 'EB Garamond', serif;
-            font-size: 21px;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
+            font-size: 21px; line-height: 1.8;
+            color: var(--text-secondary); margin-bottom: 20px;
         }
 
-        /* LINKS ROW */
-        .links-row {
+        .page-links {
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            gap: 16px;
             margin-top: 40px;
-            margin-bottom: 0;
         }
 
-        .links-row a {
-            color: var(--text-muted);
+        .page-link {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            color: var(--text);
+            padding: 14px 36px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
             text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
+            transition: all 0.3s;
         }
 
-        .links-row a:hover { color: var(--accent); }
+        .page-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
 
-        /* DIVIDER */
         .divider {
             width: 100%; height: 1px;
             background: var(--border);
             margin: 60px 0;
         }
 
-        /* PHOTO GRID */
+        .section-label {
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 28px;
+        }
+
         .photo-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-bottom: 0;
         }
 
         .photo-grid img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 6px;
+            width: 100%; height: 220px;
+            object-fit: cover; border-radius: 6px;
             display: block;
             transition: transform 0.4s, filter 0.4s;
             filter: grayscale(20%);
@@ -179,75 +171,13 @@
             height: 280px;
         }
 
-        /* SECTION LABEL */
-        .section-label {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 28px;
-        }
-
-        /* CHARTS */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .chart-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 24px;
-            transition: border-color 0.3s, background 0.4s;
-        }
-
-        .chart-card:hover { border-color: var(--accent); }
-
-        .chart-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .chart-number {
-            font-family: 'EB Garamond', serif;
-            font-size: 32px;
-            font-weight: 500;
-            color: var(--text);
-            margin-bottom: 2px;
-        }
-
-        .chart-sub {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
-
-        .chart-source {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-align: right;
-            margin-top: 16px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* INTERESTS */
         .interests {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            display: flex; flex-wrap: wrap; gap: 10px;
         }
 
         .interest {
             font-family: 'EB Garamond', serif;
-            font-size: 16px;
-            color: var(--text-secondary);
+            font-size: 16px; color: var(--text-secondary);
             padding: 8px 18px;
             border: 1px solid var(--border);
             border-radius: 20px;
@@ -259,16 +189,70 @@
             color: var(--accent);
         }
 
-        /* FOOTER */
-        .footer-line {
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px; padding: 24px;
+            transition: border-color 0.3s, background 0.4s;
+        }
+
+        .chart-card:hover { border-color: var(--accent); }
+
+        .chart-label {
+            font-size: 11px; font-weight: 600;
+            letter-spacing: 1px; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 4px;
+        }
+
+        .chart-number {
+            font-family: 'EB Garamond', serif;
+            font-size: 32px; font-weight: 500;
+            color: var(--text); margin-bottom: 2px;
+        }
+
+        .chart-sub {
+            font-size: 12px; color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .chart-source {
+            font-size: 11px; color: var(--text-muted);
+            text-align: right; margin-top: 16px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: var(--text-muted);
+        }
+
+        .footer-contacts {
             margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-contacts a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        .footer-contacts a:hover { color: var(--accent); }
+
+        .footer-location {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 16px;
             letter-spacing: 0.3px;
         }
 
-        /* RESPONSIVE */
         @media (max-width: 600px) {
             .page { padding: 40px 20px 80px; }
             h1 { font-size: 36px; }
@@ -276,6 +260,7 @@
             .photo-grid .wide { height: 220px; }
             .photo-grid img { height: 200px; }
             .charts-grid { grid-template-columns: 1fr; }
+            .page-links { flex-direction: column; }
         }
     </style>
 </head>
@@ -298,33 +283,32 @@
             I care about telling stories through data and what those stories mean for policy. Currently thinking about AI governance, climate finance, and stablecoin regulation.
         </p>
 
-        <div class="links-row">
-            <a href="mailto:rs5309a@american.edu">Email</a>
-            <a href="https://www.linkedin.com/in/rishi-siddharth" target="_blank">LinkedIn</a>
-            <a href="https://github.com/Rsiddharth54" target="_blank">GitHub</a>
-            <a href="https://rishisiddharth.substack.com" target="_blank">Substack</a>
-            <a href="https://x.com/ertratz" target="_blank">X</a>
-            <a href="https://www.youtube.com/@RishiSiddharth" target="_blank">YouTube</a>
-            <a href="https://www.instagram.com/ishi" target="_blank">Instagram</a>
-            <a href="Rishi_Siddharth_Resume2026.pdf" target="_blank">Resume</a>
-                    <a href="experience.html">Experience</a>
+        <div class="page-links">
+            <a href="experience.html" class="page-link">Experience</a>
+            <a href="books.html" class="page-link">Books</a>
         </div>
 
         <div class="divider"></div>
 
-        <!-- PHOTOS -->
         <p class="section-label">Life</p>
         <div class="photo-grid">
-            <img src="images/cambridge.png" alt="At the Pentagon">
+            <img src="images/cambridge.png" alt="Pentagon">
             <img src="images/chess.jpeg" alt="Chess">
             <img src="images/rishi.png" alt="Rishi" class="wide">
-            <img src="images/LSE.png" alt="London School of Economics">
             <img src="images/soccer.png" alt="Soccer">
+            <img src="images/conference.png" alt="Conference">
         </div>
 
         <div class="divider"></div>
 
-        <!-- INTERESTS -->
+        <p class="section-label">Education</p>
+        <div class="photo-grid">
+            <img src="images/American_University.png" alt="American University">
+            <img src="images/LSE.png" alt="London School of Economics">
+        </div>
+
+        <div class="divider"></div>
+
         <p class="section-label">Interests</p>
         <div class="interests">
             <span class="interest">Soccer</span>
@@ -337,8 +321,7 @@
 
         <div class="divider"></div>
 
-        <!-- CHARTS -->
-        <p class="section-label">Graphs that give me hope</p>
+        <p class="section-label"></p>
         <div class="charts-grid">
             <div class="chart-card">
                 <p class="chart-label">Global life expectancy</p>
@@ -355,11 +338,20 @@
         </div>
         <p class="chart-source">source: Our World in Data</p>
 
-        <p class="footer-line">Washington, DC / Menlo Park, CA</p>
+        <div class="footer-contacts">
+            <a href="mailto:rs5309a@american.edu">Email</a>
+            <a href="https://www.linkedin.com/in/rishi-siddharth" target="_blank">LinkedIn</a>
+            <a href="https://github.com/Rsiddharth54" target="_blank">GitHub</a>
+            <a href="https://rishisiddharth.substack.com" target="_blank">Substack</a>
+            <a href="https://x.com/ertratz" target="_blank">X</a>
+            <a href="https://www.youtube.com/@RishiSiddharth" target="_blank">YouTube</a>
+            <a href="https://www.instagram.com/ishi" target="_blank">Instagram</a>
+            <a href="Rishi_Siddharth_Resume2026.pdf" target="_blank">Resume</a>
+        </div>
+        <p class="footer-location">Washington, DC / Menlo Park, CA</p>
     </div>
 
     <script>
-        // THEME
         function toggleTheme() {
             const html = document.documentElement;
             const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -370,17 +362,15 @@
         const saved = localStorage.getItem('theme');
         if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 
-        // CONSTELLATION
         const canvas = document.getElementById('constellation');
         const ctx = canvas.getContext('2d');
-        let W, H;
         const nodes = [];
-        const NUM = 50;
+        const NUM = 80;
 
         function resize() {
             const dpr = window.devicePixelRatio || 1;
-            W = canvas.width = window.innerWidth * dpr;
-            H = canvas.height = window.innerHeight * dpr;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
 
@@ -391,9 +381,9 @@
             nodes.push({
                 x: Math.random() * window.innerWidth,
                 y: Math.random() * window.innerHeight,
-                vx: (Math.random() - 0.5) * 0.25,
-                vy: (Math.random() - 0.5) * 0.25,
-                r: Math.random() * 2 + 1
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                r: Math.random() * 2.5 + 1
             });
         }
 
@@ -401,42 +391,31 @@
             const w = window.innerWidth;
             const h = window.innerHeight;
             ctx.clearRect(0, 0, w, h);
-
             const style = getComputedStyle(document.documentElement);
             const rgb = style.getPropertyValue('--node-color').trim();
 
             for (let i = 0; i < NUM; i++) {
                 const a = nodes[i];
-                a.x += a.vx;
-                a.y += a.vy;
+                a.x += a.vx; a.y += a.vy;
                 if (a.x < 0 || a.x > w) a.vx *= -1;
                 if (a.y < 0 || a.y > h) a.vy *= -1;
 
                 for (let j = i + 1; j < NUM; j++) {
                     const b = nodes[j];
-                    const dx = a.x - b.x;
-                    const dy = a.y - b.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 140) {
-                        ctx.beginPath();
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
-                        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.18 * (1 - dist / 140)) + ')';
-                        ctx.lineWidth = 0.8;
-                        ctx.stroke();
+                    const dist = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+                    if (dist < 160) {
+                        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+                        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.25 * (1 - dist / 160)) + ')';
+                        ctx.lineWidth = 1; ctx.stroke();
                     }
                 }
-
-                ctx.beginPath();
-                ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(' + rgb + ', 0.3)';
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(' + rgb + ', 0.45)'; ctx.fill();
             }
             requestAnimationFrame(drawConstellation);
         }
         drawConstellation();
 
-        // CHARTS
         let chart1Instance = null;
         let chart2Instance = null;
 
