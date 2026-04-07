@@ -1082,6 +1082,34 @@ body {
         width: 150px;
     }
 
+   /* Multiple logos container */
+.multi-logos {
+    display: flex;
+    gap: 12px;                    /* space between logos */
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+/* Small logo style */
+.small-logo {
+    width: 38px;                  /* adjust size as needed */
+    height: 38px;
+    object-fit: contain;          /* keeps logo proportions */
+    border-radius: 6px;
+    transition: transform 0.2s ease;
+}
+
+.small-logo:hover {
+    transform: scale(1.08);       /* nice subtle hover effect */
+}
+
+/* Optional: Make logos slightly smaller on mobile */
+@media (max-width: 600px) {
+    .small-logo {
+        width: 32px;
+        height: 32px;
+    }
+}
 
 
 
