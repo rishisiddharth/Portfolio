@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Every Experience that has helped me get this far  - Rishi Siddharth</title>
+    <title>Experience - Rishi Siddharth</title>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,6 +16,10 @@
             --border: #e5e2dc;
             --toggle-bg: #e5e2dc;
             --node-color: 90, 122, 90;
+            --card-bg: #ffffff;
+            --map-land: #d4d0c8;
+            --map-bg: #e8e5de;
+            --map-border: #bbb8b0;
         }
 
         [data-theme="dark"] {
@@ -28,6 +32,10 @@
             --border: #2a2a2a;
             --toggle-bg: #2a2a2a;
             --node-color: 127, 168, 127;
+            --card-bg: #1a1a1a;
+            --map-land: #2a2a2a;
+            --map-bg: #1a1a1a;
+            --map-border: #333;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -104,7 +112,168 @@
             letter-spacing: 0.5px; margin-bottom: 60px;
         }
 
-        /* TIMELINE */
+        /* ---- INTERACTIVE MAP ---- */
+        .map-section {
+            margin-bottom: 60px;
+        }
+
+        .map-section .section-label {
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 20px;
+        }
+
+        .map-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2.2 / 1;
+            background: var(--map-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        .map-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Map pins */
+        .map-pin {
+            position: absolute;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg);
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s;
+            z-index: 3;
+        }
+
+        .map-pin::after {
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            border: 1.5px solid var(--accent);
+            opacity: 0;
+            animation: pingPin 2.5s ease-out infinite;
+        }
+
+        @keyframes pingPin {
+            0% { transform: scale(0.8); opacity: 0.6; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .map-pin:hover {
+            transform: translate(-50%, -50%) scale(1.4);
+            box-shadow: 0 0 16px var(--accent);
+        }
+
+        .map-pin-label {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            pointer-events: none;
+        }
+
+        /* Popup card */
+        .map-popup {
+            display: none;
+            position: absolute;
+            width: 260px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            z-index: 10;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transform: translateX(-50%);
+        }
+
+        [data-theme="dark"] .map-popup {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .map-popup.active { display: block; }
+
+        .map-popup-city {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .map-popup-item {
+            display: block;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+
+        .map-popup-item:last-child { margin-bottom: 0; }
+
+        .map-popup-item:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .map-popup-item .popup-role {
+            font-family: 'EB Garamond', serif;
+            font-size: 14px;
+            color: var(--text);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .map-popup-item .popup-org {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--accent);
+            letter-spacing: 0.3px;
+        }
+
+        .map-popup-close {
+            position: absolute;
+            top: 8px; right: 10px;
+            background: none; border: none;
+            color: var(--text-muted);
+            font-size: 16px; cursor: pointer;
+            line-height: 1;
+        }
+
+        .map-popup-close:hover { color: var(--accent); }
+
+        /* Connection lines between cities */
+        .map-lines {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .divider {
+            width: 100%; height: 1px;
+            background: var(--border);
+            margin: 60px 0;
+        }
+
+        /* ---- TIMELINE ---- */
         .timeline {
             position: relative;
             padding-left: 28px;
@@ -153,7 +322,6 @@
             display: block;
         }
 
-        /* ENTRY HEADER: logo + title side by side */
         .entry-header {
             display: flex;
             align-items: center;
@@ -206,7 +374,6 @@
             line-height: 1.3;
         }
 
-        /* no-logo entries */
         .timeline-entry > h2 {
             font-family: 'EB Garamond', serif;
             font-size: 22px;
@@ -216,7 +383,7 @@
         }
 
         .timeline-org {
-            font-size: 25px;
+            font-size: 15px;
             color: var(--accent);
             margin-bottom: 4px;
         }
@@ -230,7 +397,7 @@
 
         .timeline-location {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 25px;
+            font-size: 13px;
             color: var(--text-muted);
             letter-spacing: 0.3px;
             margin-bottom: 12px;
@@ -279,6 +446,7 @@
             .entry-header { flex-direction: column; align-items: flex-start; gap: 10px; }
             .entry-header img.timeline-logo { width: 48px; height: 48px; }
             .entry-header .multi-logos img.small-logo { width: 40px; height: 40px; }
+            .map-popup { width: 220px; }
         }
     </style>
 </head>
@@ -294,9 +462,84 @@
         <h1>Experience</h1>
         <p class="subtitle">The last few years</p>
 
+        <!-- INTERACTIVE MAP -->
+        <div class="map-section">
+            <p class="section-label">Where I've worked</p>
+            <div class="map-container" id="mapContainer">
+                <canvas class="map-canvas" id="mapCanvas"></canvas>
+                <svg class="map-lines" id="mapLines"></svg>
+
+                <!-- DC -->
+                <div class="map-pin" id="pin-dc" data-city="dc">
+                    <span class="map-pin-label">DC</span>
+                </div>
+                <div class="map-popup" id="popup-dc">
+                    <button class="map-popup-close" onclick="closePopup('dc')">&times;</button>
+                    <div class="map-popup-city">Washington, DC</div>
+                    <a class="map-popup-item" href="https://www.american.edu/news/fly-me-to-the-moon-for-science.cfm" target="_blank">
+                        <span class="popup-role">Satellite Data Analyst</span>
+                        <span class="popup-org">NASA Artemis II / American University</span>
+                    </a>
+                    <a class="map-popup-item" href="https://www.spatialreu.org/" target="_blank">
+                        <span class="popup-role">Data Science Research Intern</span>
+                        <span class="popup-org">Georgetown REU (NSF/NSA)</span>
+                    </a>
+                    <a class="map-popup-item" href="https://www.american.edu/" target="_blank">
+                        <span class="popup-role">B.S. Data Science & Intl Business</span>
+                        <span class="popup-org">American University</span>
+                    </a>
+                </div>
+
+                <!-- London -->
+                <div class="map-pin" id="pin-london" data-city="london">
+                    <span class="map-pin-label">London</span>
+                </div>
+                <div class="map-popup" id="popup-london">
+                    <button class="map-popup-close" onclick="closePopup('london')">&times;</button>
+                    <div class="map-popup-city">London</div>
+                    <a class="map-popup-item" href="https://www.transitionpathwayinitiative.org/" target="_blank">
+                        <span class="popup-role">Data Science Researcher</span>
+                        <span class="popup-org">Transition Pathway Initiative, LSE</span>
+                    </a>
+                    <a class="map-popup-item" href="https://www.lse.ac.uk/" target="_blank">
+                        <span class="popup-role">Year Abroad</span>
+                        <span class="popup-org">London School of Economics</span>
+                    </a>
+                </div>
+
+                <!-- NYC -->
+                <div class="map-pin" id="pin-nyc" data-city="nyc">
+                    <span class="map-pin-label">NYC</span>
+                </div>
+                <div class="map-popup" id="popup-nyc">
+                    <button class="map-popup-close" onclick="closePopup('nyc')">&times;</button>
+                    <div class="map-popup-city">New York City</div>
+                    <a class="map-popup-item" href="https://zinnov.com/en-us/" target="_blank">
+                        <span class="popup-role">Consultant</span>
+                        <span class="popup-org">Zinnov</span>
+                    </a>
+                </div>
+
+                <!-- SF -->
+                <div class="map-pin" id="pin-sf" data-city="sf">
+                    <span class="map-pin-label">SF</span>
+                </div>
+                <div class="map-popup" id="popup-sf">
+                    <button class="map-popup-close" onclick="closePopup('sf')">&times;</button>
+                    <div class="map-popup-city">San Francisco</div>
+                    <a class="map-popup-item" href="https://intermezzo.ai/" target="_blank">
+                        <span class="popup-role">Product Intern</span>
+                        <span class="popup-org">Intermezzo.ai</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- TIMELINE -->
         <div class="timeline">
 
-            <!-- Zinnov -->
             <div class="timeline-entry">
                 <span class="timeline-year">May 2026</span>
                 <h2>Incoming Consultant</h2>
@@ -311,7 +554,6 @@
                 </div>
             </div>
 
-            <!-- Volunteer work with Artemis II through AU phyicss.  -->
             <div class="timeline-entry">
                 <span class="timeline-year">Jan 2026 - Present</span>
                 <div class="entry-header">
@@ -331,7 +573,6 @@
                 </div>
             </div>
 
-            <!-- Helping and learning from all of my friends amazing startups -->
             <div class="timeline-entry">
                 <span class="timeline-year">2025 - 2026</span>
                 <div class="entry-header">
@@ -357,12 +598,11 @@
                 </div>
             </div>
 
-            <!-- Intermezzo.ai -->
             <div class="timeline-entry">
                 <span class="timeline-year">2025</span>
                 <div class="entry-header">
                     <img src="images/INTERMEZZO.png" alt="Intermezzo.ai" class="timeline-logo">
-                    <h2>Product Intern </h2>
+                    <h2>Product Intern</h2>
                 </div>
                 <div class="timeline-org"><a href="https://intermezzo.ai/" target="_blank">Intermezzo.ai</a></div>
                 <p class="timeline-desc">
@@ -377,9 +617,6 @@
                 </div>
             </div>
 
-      
-
-            <!-- LSE Year Abroad -->
             <div class="timeline-entry">
                 <span class="timeline-year">2024 - 2025</span>
                 <h2>Year Abroad</h2>
@@ -387,7 +624,7 @@
                 <div class="timeline-location">London, UK</div>
                 <p class="timeline-desc">
                     Studied Advanced Data Manipulation, Probability & Inference, Economics in Public Policy, and Data Science for Social Scientists.
-                    I played LSE Mens club soccer on the 4s cmon you 4s 
+                    I played LSE Mens club soccer on the 4s cmon you 4s
                 </p>
                 <div class="timeline-tags">
                     <span class="timeline-tag">data science</span>
@@ -395,7 +632,6 @@
                 </div>
             </div>
 
-            <!-- Transition Pathway Initiative -->
             <div class="timeline-entry">
                 <span class="timeline-year">Jan - May 2025</span>
                 <div class="entry-header">
@@ -413,7 +649,6 @@
                 </div>
             </div>
 
-            <!-- Georgetown REU -->
             <div class="timeline-entry">
                 <span class="timeline-year">May - Sep 2024</span>
                 <div class="entry-header">
@@ -432,7 +667,6 @@
                 </div>
             </div>
 
-            <!-- American University -->
             <div class="timeline-entry">
                 <span class="timeline-year">2022 - 2026</span>
                 <h2>B.S. Data Science & International Business</h2>
@@ -453,32 +687,34 @@
     </div>
 
     <script>
+        // THEME
         function toggleTheme() {
             const html = document.documentElement;
             const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
+            drawMap();
         }
         const saved = localStorage.getItem('theme');
         if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 
-        const canvas = document.getElementById('constellation');
-        const ctx = canvas.getContext('2d');
-        const nodes = [];
-        const NUM = 80;
+        // CONSTELLATION
+        const cCanvas = document.getElementById('constellation');
+        const cCtx = cCanvas.getContext('2d');
+        const cNodes = [];
+        const CNUM = 80;
 
-        function resize() {
+        function cResize() {
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = window.innerWidth * dpr;
-            canvas.height = window.innerHeight * dpr;
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            cCanvas.width = window.innerWidth * dpr;
+            cCanvas.height = window.innerHeight * dpr;
+            cCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
+        window.addEventListener('resize', cResize);
+        cResize();
 
-        window.addEventListener('resize', resize);
-        resize();
-
-        for (let i = 0; i < NUM; i++) {
-            nodes.push({
+        for (let i = 0; i < CNUM; i++) {
+            cNodes.push({
                 x: Math.random() * window.innerWidth,
                 y: Math.random() * window.innerHeight,
                 vx: (Math.random() - 0.5) * 0.3,
@@ -487,34 +723,166 @@
             });
         }
 
-        function drawConstellation() {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            ctx.clearRect(0, 0, w, h);
-            const style = getComputedStyle(document.documentElement);
-            const rgb = style.getPropertyValue('--node-color').trim();
-
-            for (let i = 0; i < NUM; i++) {
-                const a = nodes[i];
+        function drawConst() {
+            const w = window.innerWidth, h = window.innerHeight;
+            cCtx.clearRect(0, 0, w, h);
+            const rgb = getComputedStyle(document.documentElement).getPropertyValue('--node-color').trim();
+            for (let i = 0; i < CNUM; i++) {
+                const a = cNodes[i];
                 a.x += a.vx; a.y += a.vy;
                 if (a.x < 0 || a.x > w) a.vx *= -1;
                 if (a.y < 0 || a.y > h) a.vy *= -1;
-
-                for (let j = i + 1; j < NUM; j++) {
-                    const b = nodes[j];
+                for (let j = i + 1; j < CNUM; j++) {
+                    const b = cNodes[j];
                     const dist = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
                     if (dist < 160) {
-                        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
-                        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.25 * (1 - dist / 160)) + ')';
-                        ctx.lineWidth = 1; ctx.stroke();
+                        cCtx.beginPath(); cCtx.moveTo(a.x, a.y); cCtx.lineTo(b.x, b.y);
+                        cCtx.strokeStyle = 'rgba(' + rgb + ',' + (0.25 * (1 - dist / 160)) + ')';
+                        cCtx.lineWidth = 1; cCtx.stroke();
                     }
                 }
-                ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(' + rgb + ', 0.45)'; ctx.fill();
+                cCtx.beginPath(); cCtx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+                cCtx.fillStyle = 'rgba(' + rgb + ', 0.45)'; cCtx.fill();
             }
-            requestAnimationFrame(drawConstellation);
+            requestAnimationFrame(drawConst);
         }
-        drawConstellation();
+        drawConst();
+
+        // WORLD MAP
+        // Simplified world map coordinates (Mercator-ish projection)
+        // Each continent is an array of [x%, y%] polygon points
+        const continents = [
+            // North America
+            [[5,18],[12,12],[18,10],[25,12],[28,18],[30,28],[28,35],[22,38],[18,42],[12,40],[8,35],[5,28]],
+            // South America
+            [[22,50],[26,48],[30,52],[32,58],[30,68],[28,75],[24,80],[20,75],[18,65],[20,55]],
+            // Europe
+            [[45,14],[48,12],[52,14],[54,18],[52,22],[50,26],[48,28],[45,25],[43,20]],
+            // Africa
+            [[43,32],[48,30],[54,32],[56,40],[55,50],[52,58],[48,62],[44,58],[42,48],[40,40]],
+            // Asia
+            [[54,10],[60,8],[68,10],[75,12],[80,16],[82,22],[78,28],[74,30],[70,32],[65,28],[60,24],[56,18]],
+            // Middle East
+            [[52,26],[56,24],[60,26],[58,32],[54,34],[52,30]],
+            // India/SE Asia
+            [[65,28],[70,30],[72,36],[68,40],[64,38],[62,32]],
+            // Australia
+            [[72,58],[80,55],[84,58],[82,66],[76,68],[72,64]],
+        ];
+
+        // City positions as percentage of map container
+        const cities = {
+            sf:     { x: 10, y: 30 },
+            dc:     { x: 24, y: 28 },
+            nyc:    { x: 26, y: 25 },
+            london: { x: 46, y: 18 },
+        };
+
+        const mapCanvas = document.getElementById('mapCanvas');
+        const mapCtx = mapCanvas.getContext('2d');
+        const mapContainer = document.getElementById('mapContainer');
+
+        function drawMap() {
+            const rect = mapContainer.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            mapCanvas.width = rect.width * dpr;
+            mapCanvas.height = rect.height * dpr;
+            mapCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            const w = rect.width, h = rect.height;
+            const style = getComputedStyle(document.documentElement);
+            const landColor = style.getPropertyValue('--map-land').trim();
+            const borderColor = style.getPropertyValue('--map-border').trim();
+            const accent = style.getPropertyValue('--accent').trim();
+
+            mapCtx.clearRect(0, 0, w, h);
+
+            // Draw continents
+            continents.forEach(pts => {
+                mapCtx.beginPath();
+                pts.forEach((p, i) => {
+                    const x = (p[0] / 100) * w;
+                    const y = (p[1] / 100) * h;
+                    if (i === 0) mapCtx.moveTo(x, y);
+                    else mapCtx.lineTo(x, y);
+                });
+                mapCtx.closePath();
+                mapCtx.fillStyle = landColor;
+                mapCtx.fill();
+                mapCtx.strokeStyle = borderColor;
+                mapCtx.lineWidth = 0.5;
+                mapCtx.stroke();
+            });
+
+            // Draw connection lines between cities
+            const cityPairs = [['sf','dc'],['dc','nyc'],['dc','london'],['nyc','london']];
+            cityPairs.forEach(([a, b]) => {
+                const ca = cities[a], cb = cities[b];
+                const x1 = (ca.x / 100) * w, y1 = (ca.y / 100) * h;
+                const x2 = (cb.x / 100) * w, y2 = (cb.y / 100) * h;
+                mapCtx.beginPath();
+                mapCtx.moveTo(x1, y1);
+                // Curved line
+                const mx = (x1 + x2) / 2, my = Math.min(y1, y2) - 20;
+                mapCtx.quadraticCurveTo(mx, my, x2, y2);
+                mapCtx.strokeStyle = accent;
+                mapCtx.globalAlpha = 0.2;
+                mapCtx.lineWidth = 1.5;
+                mapCtx.setLineDash([4, 4]);
+                mapCtx.stroke();
+                mapCtx.setLineDash([]);
+                mapCtx.globalAlpha = 1;
+            });
+
+            // Position pins
+            Object.keys(cities).forEach(key => {
+                const pin = document.getElementById('pin-' + key);
+                const c = cities[key];
+                pin.style.left = c.x + '%';
+                pin.style.top = c.y + '%';
+            });
+        }
+
+        window.addEventListener('resize', drawMap);
+        drawMap();
+
+        // Pin click handlers
+        document.querySelectorAll('.map-pin').forEach(pin => {
+            pin.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const city = pin.dataset.city;
+                // Close all popups
+                document.querySelectorAll('.map-popup').forEach(p => p.classList.remove('active'));
+                // Open this one
+                const popup = document.getElementById('popup-' + city);
+                const pinRect = pin.getBoundingClientRect();
+                const containerRect = mapContainer.getBoundingClientRect();
+                const pinLeft = pinRect.left - containerRect.left + pinRect.width / 2;
+                const pinTop = pinRect.top - containerRect.top;
+
+                popup.style.left = pinLeft + 'px';
+                // Show above or below depending on position
+                if (pinTop > containerRect.height / 2) {
+                    popup.style.top = 'auto';
+                    popup.style.bottom = (containerRect.height - pinTop + 10) + 'px';
+                } else {
+                    popup.style.top = (pinTop + 24) + 'px';
+                    popup.style.bottom = 'auto';
+                }
+                popup.classList.add('active');
+            });
+        });
+
+        function closePopup(city) {
+            document.getElementById('popup-' + city).classList.remove('active');
+        }
+
+        // Close popups when clicking outside
+        mapContainer.addEventListener('click', (e) => {
+            if (!e.target.closest('.map-pin') && !e.target.closest('.map-popup')) {
+                document.querySelectorAll('.map-popup').forEach(p => p.classList.remove('active'));
+            }
+        });
     </script>
 </body>
 </html>
