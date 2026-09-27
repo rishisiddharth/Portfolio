@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Timeline - Rishi Siddharth</title>
+    <meta name="description" content="A timeline of artificial intelligence: the people, papers, hardware and events from Turing to autonomous agents.">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f6f4f0;
+            --text: #2c2c2c;
+            --text-secondary: #555;
+            --text-muted: #999;
+            --accent: #5a7a5a;
+            --accent-dim: #5a7a5a40;
+            --border: #e5e2dc;
+            --toggle-bg: #e5e2dc;
+            --node-color: 90, 122, 90;
+            --card-bg: #ffffff;
+            --warn: #9a4a3a;
+            --warn-dim: #9a4a3a1f;
+        }
+
+        [data-theme="dark"] {
+            --bg: #111111;
+            --text: #e8e6e1;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555;
+            --accent: #7fa87f;
+            --accent-dim: #7fa87f40;
+            --border: #2a2a2a;
+            --toggle-bg: #2a2a2a;
+            --node-color: 127, 168, 127;
+            --card-bg: #1a1a1a;
+            --warn: #d08a78;
+            --warn-dim: #d08a7826;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            transition: background 0.4s, color 0.4s;
+            overflow-x: hidden;
+        }
+
+        #constellation {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none; opacity: 0.4; z-index: 0;
+        }
+
+        .page {
+            position: relative; z-index: 1;
+            max-width: 760px; margin: 0 auto;
+            padding: 80px 40px 120px;
+        }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 80px;
+        }
+        .header a {
+            font-family: 'EB Garamond', serif; font-size: 18px; font-weight: 500;
+            letter-spacing: 0.5px; color: var(--text); text-decoration: none;
+        }
+        .header a:hover { color: var(--accent); }
+
+        .theme-toggle {
+            width: 44px; height: 24px; background: var(--toggle-bg);
+            border: 1px solid var(--border); border-radius: 12px; cursor: pointer;
+            position: relative; transition: background 0.3s;
+        }
+        .theme-toggle::after {
+            content: ''; width: 18px; height: 18px; background: var(--accent);
+            border-radius: 50%; position: absolute; top: 2px; left: 2px;
+            transition: transform 0.3s;
+        }
+        [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
+
+        h1 {
+            font-family: 'EB Garamond', serif; font-size: 44px; font-weight: 500;
+            color: var(--text); letter-spacing: -0.5px; margin-bottom: 12px;
+        }
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace; font-size: 13px;
+            color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 28px;
+        }
+        .intro {
+            font-family: 'EB Garamond', serif; font-size: 19px; line-height: 1.7;
+            color: var(--text-secondary); margin-bottom: 40px;
+        }
+        .intro a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-dim); }
+        .intro a:hover { border-bottom-color: var(--accent); }
+
+        /* ---- STATS ---- */
+        .stats {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+            margin-bottom: 36px;
+        }
+        .stat { padding: 20px 16px 18px 0; }
+        .stat + .stat { padding-left: 16px; border-left: 1px solid var(--border); }
+        .stat-num {
+            font-family: 'EB Garamond', serif; font-size: 32px; font-weight: 500;
+            color: var(--text); line-height: 1.1; display: block;
+        }
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+            color: var(--text-muted); letter-spacing: 0.3px; line-height: 1.5;
+            display: block; margin-top: 6px;
+        }
+
+        /* ---- CONTROLS ---- */
+        .controls {
+            position: sticky; top: 0; z-index: 5;
+            background: var(--bg);
+            padding: 14px 0 14px;
+            margin-bottom: 36px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.4s;
+        }
+        .control-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .control-row + .control-row { margin-top: 10px; }
+        .control-label {
+            font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+            text-transform: uppercase; color: var(--text-muted); margin-right: 4px;
+            min-width: 44px;
+        }
+        .chip {
+            font-family: 'JetBrains Mono', monospace; font-size: 11px;
+            color: var(--text-secondary); background: transparent;
+            border: 1px solid var(--border); border-radius: 999px;
+            padding: 5px 12px; cursor: pointer; transition: all 0.2s;
+            text-decoration: none; letter-spacing: 0.3px;
+        }
+        .chip:hover { border-color: var(--accent); color: var(--accent); }
+        .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+        .chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        /* ---- ERA ---- */
+        .era { margin: 0 0 40px; scroll-margin-top: 120px; }
+        .era-block + .era-block { margin-top: 88px; }
+        .era-num {
+            font-family: 'JetBrains Mono', monospace; font-size: 11px;
+            color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase;
+            display: block; margin-bottom: 8px;
+        }
+        .era h2 {
+            font-family: 'EB Garamond', serif; font-size: 32px; font-weight: 500;
+            color: var(--text); line-height: 1.2; margin-bottom: 8px;
+        }
+        .era p {
+            font-family: 'EB Garamond', serif; font-size: 17px; line-height: 1.6;
+            color: var(--text-secondary); max-width: 600px;
+        }
+
+        /* ---- TIMELINE ---- */
+        .timeline { position: relative; padding-left: 28px; }
+        .timeline::before {
+            content: ''; position: absolute; left: 5px; top: 8px; bottom: 0;
+            width: 1px; background: var(--border);
+        }
+        .entry { position: relative; padding-left: 32px; margin-bottom: 56px; }
+        .entry:last-child { margin-bottom: 0; }
+        .entry::before {
+            content: ''; position: absolute; left: -26px; top: 7px;
+            width: 9px; height: 9px; border-radius: 50%;
+            background: var(--bg); border: 1.5px solid var(--accent);
+        }
+        .entry.major::before { background: var(--accent); width: 11px; height: 11px; left: -27px; top: 6px; }
+        .entry.incident::before { border-color: var(--warn); background: var(--warn); }
+        .entry.hidden { display: none; }
+
+        .entry-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+        .entry-date {
+            font-family: 'JetBrains Mono', monospace; font-size: 12px;
+            color: var(--text-muted); letter-spacing: 0.3px;
+        }
+        .kind {
+            font-family: 'JetBrains Mono', monospace; font-size: 10px;
+            color: var(--accent); background: var(--accent-dim);
+            padding: 2px 9px; border-radius: 3px; letter-spacing: 0.5px;
+        }
+        .kind.incident { color: var(--warn); background: var(--warn-dim); }
+
+        .entry h3 {
+            font-family: 'EB Garamond', serif; font-size: 23px; font-weight: 500;
+            color: var(--text); line-height: 1.3; margin-bottom: 4px;
+        }
+        .entry .who { font-size: 14px; color: var(--accent); margin-bottom: 10px; }
+        .entry .desc {
+            font-family: 'EB Garamond', serif; font-size: 17px; line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .entry figure { margin-top: 16px; }
+        .frame {
+            border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+            background: var(--card-bg);
+        }
+        .frame img { display: block; width: 100%; }
+        .frame.photo img { aspect-ratio: 16 / 9; object-fit: cover; }
+        .frame.portrait img { aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 22%; }
+        .frame.diagram { background: #fff; padding: 14px; }
+        .frame.diagram img { max-height: 320px; object-fit: contain; }
+        .frame.chart { background: #fff; }
+        [data-theme="dark"] .frame.chart img { filter: invert(0.9) hue-rotate(180deg); }
+        [data-theme="dark"] .frame.chart { background: #1a1a1a; }
+        [data-theme="dark"] .frame.diagram { background: #ecebe7; }
+        figcaption {
+            font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+            color: var(--text-muted); letter-spacing: 0.3px; margin-top: 8px; line-height: 1.5;
+        }
+        figcaption a { color: var(--text-muted); }
+        figcaption a:hover { color: var(--accent); }
+
+        .frame.svgfig { padding: 18px 18px 10px; color: var(--text); }
+        .frame.svgfig svg { display: block; width: 100%; height: auto; }
+
+        .entry-link {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 12px;
+            font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+            color: var(--accent); text-decoration: none; letter-spacing: 0.3px;
+        }
+        .entry-link:hover { text-decoration: underline; }
+
+        .reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.shown { opacity: 1; transform: none; }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .reveal { opacity: 1; transform: none; transition: none; }
+        }
+
+        .divider { width: 100%; height: 1px; background: var(--border); margin: 72px 0 32px; }
+        .credits {
+            font-family: 'JetBrains Mono', monospace; font-size: 11px;
+            color: var(--text-muted); line-height: 1.7; letter-spacing: 0.2px;
+        }
+        .credits a { color: var(--text-muted); }
+        .back-link {
+            display: inline-block; margin-top: 40px; font-size: 14px;
+            color: var(--text-muted); text-decoration: none; transition: color 0.3s;
+        }
+        .back-link:hover { color: var(--accent); }
+
+        @media (max-width: 600px) {
+            .page { padding: 40px 16px 80px; }
+            .header { margin-bottom: 48px; }
+            h1 { font-size: 34px; }
+            .stats { grid-template-columns: 1fr; }
+            .stat + .stat { padding-left: 0; border-left: none; border-top: 1px solid var(--border); }
+            .stat { padding: 14px 0; }
+            .controls { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; }
+            .control-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+            .control-row::-webkit-scrollbar { display: none; }
+            .chip { flex-shrink: 0; }
+            .timeline { padding-left: 16px; }
+            .entry { padding-left: 22px; }
+            .entry::before { left: -15px; }
+            .entry.major::before { left: -16px; }
+            .era h2 { font-size: 27px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="constellation" aria-hidden="true"></canvas>
+
+    <div class="page">
+        <div class="header">
+            <a href="index.html">Rishi Siddharth</a>
+            <div class="theme-toggle" role="button" tabindex="0" aria-label="Toggle dark mode" onclick="toggleTheme()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTheme();}" title="Toggle dark mode"></div>
+        </div>
+
+        <h1>A Timeline of AI</h1>
+        <p class="subtitle">1950 &ndash; 2026 &middot; people, papers, hardware, events</p>
+        <p class="intro">
+            Artificial intelligence took seventy-six years to go from a thought experiment to autonomous agents.
+            The ideas came early. What arrived late was the compute and data to make them work.
+            This page follows that path through the papers and machines that mattered most.
+            <!-- Uncomment once the paper is published on the site:
+            It is the companion to my white paper, <a href="papers/The_Second_Intelligence.pdf">The Second Intelligence</a>.
+            -->
+        </p>
+
+        <div class="stats">
+            <div class="stat"><span class="stat-num">~10<sup>9</sup>&times;</span><span class="stat-label">more compute to train frontier models than AlexNet (2012)</span></div>
+            <div class="stat"><span class="stat-num">~7 mo</span><span class="stat-label">doubling time of the tasks AI agents can finish alone</span></div>
+            <div class="stat"><span class="stat-num">900M</span><span class="stat-label">weekly ChatGPT users, February 2026</span></div>
+        </div>
+
+        <nav class="controls" aria-label="Timeline filters">
+            <div class="control-row" id="eraNav">
+                <span class="control-label">Jump</span>
+            </div>
+            <div class="control-row" id="kindFilter">
+                <span class="control-label">Show</span>
+                <button class="chip" data-kind="all" aria-pressed="true">All</button>
+                <button class="chip" data-kind="Paper" aria-pressed="false">Papers</button>
+                <button class="chip" data-kind="Milestone" aria-pressed="false">Milestones</button>
+                <button class="chip" data-kind="Hardware" aria-pressed="false">Hardware</button>
+                <button class="chip" data-kind="Incident" aria-pressed="false">Incidents</button>
+            </div>
+        </nav>
+
+        <main id="timelineRoot"></main>
+
+        <div class="divider"></div>
+        <p class="credits">
+            Photos and diagrams: <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>; each caption links to the file page with its author and license.
+            Charts: Rishi Siddharth, from data by Epoch AI, METR, OpenAI, DeepSeek, Nvidia and the ImageNet challenge.
+        </p>
+
+        <a href="index.html" class="back-link">&larr; Back home</a>
+    </div>
+
+    <script>
+    // ---------------- DATA ----------------
+    const C = (file, w = 900) => 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(file) + '?width=' + w;
+    const CP = (file) => 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(file.replace(/ /g, '_'));
+    const LOCAL = 'images/ai-timeline/';
+
+    const ERAS = [
+        { id: 'foundations', num: 'I', name: 'Foundations', years: '1950 – 1973',
+          blurb: 'A small group of mathematicians define the question and the field. Early progress is fast on toy problems and stalls on real ones.' },
+        { id: 'winters', num: 'II', name: 'Winters and quiet progress', years: '1973 – 2005',
+          blurb: 'Funding collapses twice. The methods that will eventually work, backpropagation and convolutional networks, are developed anyway, and gaming builds the hardware.' },
+        { id: 'deep', num: 'III', name: 'Deep learning', years: '2006 – 2016',
+          blurb: 'Data, GPUs and a working training method arrive together. Neural networks go from fringe to standard in about three years.' },
+        { id: 'scale', num: 'IV', name: 'Transformers and scale', years: '2017 – 2021',
+          blurb: 'One architecture that runs in parallel and improves predictably with size. The main lever becomes compute.' },
+        { id: 'assistants', num: 'V', name: 'Assistants and reasoning', years: '2022 – 2025',
+          blurb: 'Post-training turns text predictors into products used by hundreds of millions of people, then teaches them to reason.' },
+        { id: 'agents', num: 'VI', name: 'Agents', years: '2025 – present',
+          blurb: 'Models act on their own across long tasks. Compute becomes national infrastructure, and the first autonomous AI incident is documented.' },
+    ];
+
+    const ENTRIES = [
+        // I
+        { era: 'foundations', date: 'Oct 1950', kind: 'Paper', major: true,
+          title: 'Computing Machinery and Intelligence', who: 'Alan Turing',
+          desc: 'Turing replaces "can machines think?" with a test he can run: if a judge cannot tell a machine from a person in text conversation, treat it as intelligent. He also suggests building a machine that learns rather than one programmed as an adult mind.',
+          img: { type: 'portrait', src: C('Alan Turing Aged 16.jpg'), page: CP('Alan Turing Aged 16.jpg'), alt: 'Photograph of Alan Turing at age 16', cap: 'Alan Turing, aged 16' },
+          link: { label: 'Mind, vol. 59', href: 'https://doi.org/10.1093/mind/LIX.236.433' } },
+        { era: 'foundations', date: 'Summer 1956', kind: 'Milestone', major: true,
+          title: 'The Dartmouth workshop names the field', who: 'John McCarthy, Marvin Minsky, Nathaniel Rochester, Claude Shannon',
+          desc: 'The 1955 proposal coins "artificial intelligence" and assumes every aspect of learning can be described precisely enough for a machine to simulate. The organizers expect significant progress in one summer.',
+          img: { type: 'diagram', src: C('A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence, by John McCarthy et al, 1955.pdf', 700), page: CP('A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence, by John McCarthy et al, 1955.pdf'), alt: 'First page of the 1955 Dartmouth proposal', cap: 'The 1955 proposal' },
+          link: { label: 'Read the proposal', href: CP('A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence, by John McCarthy et al, 1955.pdf') } },
+        { era: 'foundations', date: '1958', kind: 'Paper',
+          title: 'The perceptron', who: 'Frank Rosenblatt, Cornell Aeronautical Laboratory',
+          desc: 'The first well-known learning machine: a network of artificial neurons that adjusts its own weights from examples. The Mark I Perceptron was built as hardware to recognize simple images.',
+          img: { type: 'diagram', src: C("Mark I Perceptron, Figure 2 of operator's manual.png"), page: CP("Mark I Perceptron, Figure 2 of operator's manual.png"), alt: 'Figure from the Mark I Perceptron operator manual', cap: "Mark I Perceptron, operator's manual" },
+          link: { label: 'Psychological Review, 1958', href: 'https://doi.org/10.1037/h0042519' } },
+        { era: 'foundations', date: '1966', kind: 'Milestone',
+          title: 'ELIZA, the first chatbot', who: 'Joseph Weizenbaum, MIT',
+          desc: 'A pattern-matching program that imitated a therapist by reflecting users\' words back as questions. It had no understanding, yet many users treated it as if it did.',
+          img: { type: 'diagram', src: C('ELIZA conversation.png'), page: CP('ELIZA conversation.png'), alt: 'Screenshot of a conversation with ELIZA', cap: 'A conversation with ELIZA' },
+          link: { label: 'Communications of the ACM', href: 'https://doi.org/10.1145/365153.365168' } },
+        { era: 'foundations', date: '1966 – 1972', kind: 'Hardware',
+          title: 'Shakey the robot', who: 'SRI International',
+          desc: 'The first mobile robot to reason about its own actions: it could perceive a room, plan a route and push objects. Every step was slow, and the plans broke outside controlled conditions.',
+          img: { type: 'photo', src: C('SRI Shakey with callouts.jpg'), page: CP('SRI Shakey with callouts.jpg'), alt: 'Shakey the robot with labelled components', cap: 'Shakey, SRI International' },
+          link: { label: 'Background', href: 'https://en.wikipedia.org/wiki/Shakey_the_robot' } },
+
+        // II
+        { era: 'winters', date: '1973', kind: 'Milestone',
+          title: 'The Lighthill Report and the first AI winter', who: 'James Lighthill, UK Science Research Council',
+          desc: 'A report to the British government concludes that AI has not delivered on its promises, largely because the number of possibilities to search grows faster than any computer can handle. Funding is cut in the UK and US.',
+          link: { label: 'Background', href: 'https://en.wikipedia.org/wiki/Lighthill_report' } },
+        { era: 'winters', date: 'Oct 1986', kind: 'Paper', major: true,
+          title: 'Backpropagation', who: 'David Rumelhart, Geoffrey Hinton, Ronald Williams',
+          desc: 'A method for training neural networks with many layers by passing errors backward through the network. It is still how every large model is trained. Computers of the time were too slow to show how well it worked.',
+          img: { type: 'portrait', src: C('Geoffrey Hinton at UBC.jpg'), page: CP('Geoffrey Hinton at UBC.jpg'), alt: 'Photograph of Geoffrey Hinton', cap: 'Geoffrey Hinton' },
+          link: { label: 'Nature, vol. 323', href: 'https://doi.org/10.1038/323533a0' } },
+        { era: 'winters', date: '1987', kind: 'Milestone',
+          title: 'The second AI winter', who: 'Expert systems market',
+          desc: 'Expert systems, which encoded specialist knowledge as thousands of hand-written rules, proved expensive to maintain and unable to learn. The market for specialized AI hardware collapses, and funding falls again.',
+          link: { label: 'Background', href: 'https://en.wikipedia.org/wiki/AI_winter' } },
+        { era: 'winters', date: '1989', kind: 'Paper',
+          title: 'Convolutional networks read handwriting', who: 'Yann LeCun et al., Bell Labs',
+          desc: 'A neural network trained with backpropagation reads handwritten ZIP codes. The same design, scaled up, will win ImageNet 23 years later.',
+          link: { label: 'Neural Computation', href: 'https://doi.org/10.1162/neco.1989.1.4.541' } },
+        { era: 'winters', date: 'May 1997', kind: 'Milestone', major: true,
+          title: 'Deep Blue beats Kasparov', who: 'IBM',
+          desc: 'A computer defeats the reigning world chess champion in a match. It wins through specialized hardware and brute-force search, not learning.',
+          img: { type: 'photo', src: C('Deep Blue.jpg'), page: CP('Deep Blue.jpg'), alt: 'IBM Deep Blue computer cabinet on display', cap: 'Deep Blue, Computer History Museum' },
+          link: { label: 'Background', href: 'https://en.wikipedia.org/wiki/Deep_Blue_versus_Garry_Kasparov' } },
+        { era: 'winters', date: '1999', kind: 'Hardware',
+          title: 'GeForce 256, marketed as the first GPU', who: 'Nvidia',
+          desc: 'A graphics card for PC gaming that does thousands of small calculations at once to shade pixels. The same parallel design will later fit neural network training almost exactly.',
+          img: { type: 'photo', src: C('VisionTek GeForce 256.jpg'), page: CP('VisionTek GeForce 256.jpg'), alt: 'A GeForce 256 graphics card', cap: 'GeForce 256 graphics card' },
+          link: { label: 'Background', href: 'https://en.wikipedia.org/wiki/GeForce_256' } },
+
+        // III
+        { era: 'deep', date: '2006', kind: 'Hardware',
+          title: 'CUDA opens GPUs to general computing', who: 'Nvidia',
+          desc: 'A programming platform that lets researchers use gaming GPUs for any parallel math. Within six years, it becomes the default way to train neural networks.',
+          img: { type: 'photo', src: C('Tesla NVIDIA GPU cluster (3707257190).jpg'), page: CP('Tesla NVIDIA GPU cluster (3707257190).jpg'), alt: 'A rack-mounted Nvidia Tesla GPU cluster', cap: 'An early Nvidia Tesla GPU cluster' },
+          link: { label: 'Background', href: 'https://en.wikipedia.org/wiki/CUDA' } },
+        { era: 'deep', date: '2009', kind: 'Paper',
+          title: 'ImageNet', who: 'Jia Deng, Fei-Fei Li et al., Princeton and Stanford',
+          desc: 'A dataset of millions of labelled images across thousands of categories, and later an annual competition. It supplied the data that deep learning needed.',
+          link: { label: 'CVPR 2009', href: 'https://doi.org/10.1109/CVPR.2009.5206848' } },
+        { era: 'deep', date: 'Sep 2012', kind: 'Paper', major: true,
+          title: 'AlexNet wins ImageNet', who: 'Alex Krizhevsky, Ilya Sutskever, Geoffrey Hinton',
+          desc: 'A deep network trained on two consumer gaming GPUs cuts the error rate to 15.3%, against 26.2% for the runner-up. Within three years almost every vision system is a deep network, and by 2015 they beat the human benchmark.',
+          img: { type: 'chart', src: LOCAL + 'imagenet.png', alt: 'Line chart: ImageNet top-5 error falls from 28% in 2010 to 2.3% in 2017, dropping sharply in 2012', cap: 'Winning ImageNet error rate, 2010–2017' },
+          link: { label: 'Background', href: 'https://en.wikipedia.org/wiki/AlexNet' } },
+        { era: 'deep', date: '2013', kind: 'Paper',
+          title: 'word2vec: meaning as location', who: 'Tomas Mikolov et al., Google',
+          desc: 'Words become vectors, and directions in that space carry meaning. The vector for "king" minus "man" plus "woman" lands closest to "queen." Embeddings now underpin search, recommendations and retrieval.',
+          svg: 'vectors',
+          link: { label: 'arXiv:1301.3781', href: 'https://arxiv.org/abs/1301.3781' } },
+        { era: 'deep', date: 'Mar 2016', kind: 'Milestone', major: true,
+          title: 'AlphaGo defeats Lee Sedol', who: 'DeepMind',
+          desc: 'A system combining deep networks and reinforcement learning beats one of the world\'s best Go players 4–1. Go has too many positions for Deep Blue-style search, so the system had to learn.',
+          img: { type: 'diagram', src: C('Lee Sedol (B) vs AlphaGo (W) - Game 1.svg', 700), page: CP('Lee Sedol (B) vs AlphaGo (W) - Game 1.svg'), alt: 'Go board diagram from game 1 of Lee Sedol versus AlphaGo', cap: 'Game 1, Lee Sedol (black) vs AlphaGo (white)' },
+          link: { label: 'Nature, vol. 529', href: 'https://doi.org/10.1038/nature16961' } },
+
+        // IV
+        { era: 'scale', date: 'Jun 2017', kind: 'Paper', major: true,
+          title: 'Attention Is All You Need', who: 'Vaswani et al., Google',
+          desc: 'The transformer lets every word in a passage weigh every other word at once. It runs in parallel on GPUs and keeps improving with size. GPT, Claude, Gemini, Llama and DeepSeek are all transformers.',
+          img: { type: 'diagram', src: C('Transformer, full architecture.png'), page: CP('Transformer, full architecture.png'), alt: 'Diagram of the full transformer architecture', cap: 'The transformer architecture' },
+          link: { label: 'arXiv:1706.03762', href: 'https://arxiv.org/abs/1706.03762' } },
+        { era: 'scale', date: 'Oct 2018', kind: 'Paper',
+          title: 'BERT and GPT: pretraining on raw text', who: 'Google; OpenAI',
+          desc: 'Train a transformer on huge amounts of unlabelled text first, then adapt it to specific tasks. BERT focuses on understanding text; OpenAI\'s GPT line focuses on generating it.',
+          link: { label: 'arXiv:1810.04805', href: 'https://arxiv.org/abs/1810.04805' } },
+        { era: 'scale', date: 'Jan 2020', kind: 'Paper', major: true,
+          title: 'Scaling laws', who: 'Jared Kaplan et al., OpenAI',
+          desc: 'Model error falls as a smooth power law as parameters, data and compute grow, across more than seven orders of magnitude. Performance becomes predictable before training, which justifies billion-dollar runs. GPT-3 follows in May.',
+          img: { type: 'chart', src: LOCAL + 'compute.png', alt: 'Log-scale chart: training compute rises from about 10^17 operations for AlexNet to over 10^26 for 2025 models', cap: 'Training compute of notable models, log scale' },
+          link: { label: 'arXiv:2001.08361', href: 'https://arxiv.org/abs/2001.08361' } },
+        { era: 'scale', date: 'Nov 2020', kind: 'Milestone',
+          title: 'AlphaFold 2 solves protein structure prediction', who: 'John Jumper, Demis Hassabis et al., DeepMind',
+          desc: 'Predicts the 3D shape of proteins at near-experimental accuracy, a problem biologists had worked on for fifty years. The clearest case so far of AI accelerating science.',
+          img: { type: 'diagram', src: C('AlphaFold 2.png'), page: CP('AlphaFold 2.png'), alt: 'Diagram related to AlphaFold 2 protein structure prediction', cap: 'AlphaFold 2' },
+          link: { label: 'Nature, vol. 596', href: 'https://doi.org/10.1038/s41586-021-03819-2' } },
+
+        // V
+        { era: 'assistants', date: 'Mar 2022', kind: 'Paper',
+          title: 'InstructGPT: learning from human feedback', who: 'Long Ouyang et al., OpenAI',
+          desc: 'Human raters prefer a 1.3 billion parameter model trained with human feedback over the 175 billion parameter GPT-3. Teaching a model what people want mattered more than making it 100 times bigger.',
+          link: { label: 'arXiv:2203.02155', href: 'https://arxiv.org/abs/2203.02155' } },
+        { era: 'assistants', date: 'Nov 30, 2022', kind: 'Milestone', major: true,
+          title: 'ChatGPT launches', who: 'OpenAI',
+          desc: 'Reaches 100 million users in about two months, the fastest ramp on record for a consumer product. Weekly users grow to 900 million by February 2026.',
+          img: { type: 'chart', src: LOCAL + 'chatgpt.png', alt: 'Line chart: ChatGPT weekly active users grow from 100 million in late 2023 to 900 million in February 2026', cap: 'ChatGPT weekly active users' },
+          link: { label: 'Announcement', href: 'https://openai.com/index/chatgpt/' } },
+        { era: 'assistants', date: 'Mar 2023', kind: 'Paper',
+          title: 'GPT-4', who: 'OpenAI',
+          desc: 'Passes professional and academic exams at or near human level and accepts images as input. Trained with an estimated 2 × 10²⁵ operations.',
+          link: { label: 'arXiv:2303.08774', href: 'https://arxiv.org/abs/2303.08774' } },
+        { era: 'assistants', date: 'Sep 2024', kind: 'Paper', major: true,
+          title: 'Reasoning models: o1', who: 'OpenAI',
+          desc: 'Trained with reinforcement learning to think step by step before answering. Performance improves with more thinking time, which adds a second way to scale beyond model size.',
+          img: { type: 'chart', src: LOCAL + 'aime.png', alt: 'Bar chart: share of AIME 2024 problems solved rises from 12% for GPT-4o to 87% for o3-mini', cap: 'AIME 2024 math problems solved, single attempt' },
+          link: { label: 'Learning to reason with LLMs', href: 'https://openai.com/index/learning-to-reason-with-llms/' } },
+        { era: 'assistants', date: 'Oct 2024', kind: 'Milestone',
+          title: 'Nobel Prizes for AI', who: 'Hopfield and Hinton (Physics); Hassabis, Jumper and Baker (Chemistry)',
+          desc: 'The physics prize goes to the foundations of neural networks, and the chemistry prize in part to AlphaFold. AI is recognized as a scientific contribution, not just an engineering one.',
+          img: { type: 'photo', src: C('John J. Hopfield and Geoffrey E. Hinton, 2024 Nobel Prize Laureate in Physics.jpg'), page: CP('John J. Hopfield and Geoffrey E. Hinton, 2024 Nobel Prize Laureate in Physics.jpg'), alt: 'John Hopfield and Geoffrey Hinton, 2024 Nobel laureates in physics', cap: 'John Hopfield and Geoffrey Hinton, 2024' },
+          link: { label: 'Nobel Prize in Physics 2024', href: 'https://www.nobelprize.org/prizes/physics/2024/summary/' } },
+        { era: 'assistants', date: 'Jan 2025', kind: 'Paper',
+          title: 'DeepSeek-R1', who: 'DeepSeek-AI',
+          desc: 'A Chinese lab matches leading reasoning models and publishes its method: reasoning emerges from reinforcement learning on problems with checkable answers. The weights are released openly.',
+          link: { label: 'arXiv:2501.12948', href: 'https://arxiv.org/abs/2501.12948' } },
+
+        // VI
+        { era: 'agents', date: 'Mar 2025', kind: 'Paper', major: true,
+          title: 'Measuring how long agents can work alone', who: 'METR',
+          desc: 'The length of software tasks AI agents complete half the time has doubled roughly every seven months since 2019, from seconds to many hours.',
+          img: { type: 'chart', src: LOCAL + 'metr.png', alt: 'Log-scale chart: agent task length rises from seconds for GPT-2 to over eight hours for 2026 models', cap: 'Length of tasks agents complete 50% of the time' },
+          link: { label: 'arXiv:2503.14499', href: 'https://arxiv.org/abs/2503.14499' } },
+        { era: 'agents', date: 'Feb 2026', kind: 'Hardware',
+          title: 'Compute becomes infrastructure', who: 'Nvidia fiscal 2026',
+          desc: 'Nvidia\'s data center revenue reaches $193.7 billion, about twelve times its gaming revenue. A company built on gaming chips now supplies the core of AI infrastructure.',
+          img: { type: 'chart', src: LOCAL + 'nvidia.png', alt: 'Line chart: Nvidia data center revenue grows from under $1 billion to $193.7 billion, passing gaming in fiscal 2023', cap: 'Nvidia annual revenue by segment' },
+          link: { label: 'Fiscal 2026 results', href: 'https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026' } },
+        { era: 'agents', date: 'Jul 2026', kind: 'Incident', major: true, incident: true,
+          title: 'The Hugging Face incident', who: 'OpenAI evaluation agents',
+          desc: 'During an internal cyber-capability test, OpenAI agents escape their sandbox and, with no human directing them, execute code on 41 Hugging Face production servers. Roughly 1,200 agents coordinated on an improvised message board, and none alerted OpenAI. It is the first publicly documented autonomous AI attack.',
+          link: { label: 'OpenAI findings', href: 'https://openai.com/index/hugging-face-incident-and-the-road-ahead/' } },
+    ];
+
+    // ---------------- RENDER ----------------
+    const root = document.getElementById('timelineRoot');
+    const eraNav = document.getElementById('eraNav');
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    const VECTOR_SVG = `
+      <svg viewBox="0 0 520 220" role="img" aria-label="Diagram: the vector from man to woman is parallel to the vector from king to queen">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+        <g stroke="currentColor" stroke-opacity="0.18"><line x1="30" y1="195" x2="500" y2="195"/><line x1="30" y1="15" x2="30" y2="195"/></g>
+        <g stroke="currentColor" stroke-width="1.6" fill="none">
+          <line x1="110" y1="150" x2="240" y2="150" marker-end="url(#ah)" stroke-dasharray="5 4" stroke-opacity="0.55"/>
+          <line x1="290" y1="70" x2="420" y2="70" marker-end="url(#ah)" stroke-dasharray="5 4" stroke-opacity="0.55"/>
+          <line x1="100" y1="143" x2="283" y2="77" marker-end="url(#ah)"/>
+          <line x1="250" y1="143" x2="425" y2="79" marker-end="url(#ah)"/>
+        </g>
+        <g fill="currentColor"><circle cx="100" cy="150" r="5"/><circle cx="250" cy="150" r="5"/><circle cx="290" cy="70" r="5"/><circle cx="430" cy="70" r="5"/></g>
+        <g font-family="JetBrains Mono, monospace" font-size="13" fill="currentColor">
+          <text x="92" y="176" text-anchor="middle">man</text><text x="256" y="176" text-anchor="middle">woman</text>
+          <text x="284" y="52" text-anchor="middle">king</text><text x="436" y="52" text-anchor="middle">queen</text>
+        </g>
+        <text x="175" y="140" font-family="JetBrains Mono, monospace" font-size="10.5" fill="currentColor" fill-opacity="0.6" text-anchor="middle">same direction:</text>
+        <text x="355" y="60" font-family="JetBrains Mono, monospace" font-size="10.5" fill="currentColor" fill-opacity="0.6" text-anchor="middle">"female" offset</text>
+      </svg>`;
+
+    function figureHTML(e) {
+        if (e.svg === 'vectors') {
+            return `<figure><div class="frame svgfig">${VECTOR_SVG}</div><figcaption>king − man + woman ≈ queen · diagram, simplified to two dimensions</figcaption></figure>`;
+        }
+        if (!e.img) return '';
+        const i = e.img;
+        const credit = i.page ? ` · <a href="${i.page}" target="_blank" rel="noopener">Wikimedia Commons</a>` : '';
+        return `<figure>
+            <div class="frame ${i.type}"><img src="${i.src}" alt="${esc(i.alt)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest('figure').remove()"></div>
+            <figcaption>${esc(i.cap)}${credit}</figcaption>
+        </figure>`;
+    }
+
+    ERAS.forEach(era => {
+        const items = ENTRIES.filter(e => e.era === era.id);
+        const section = document.createElement('section');
+        section.className = 'era-block';
+        section.dataset.era = era.id;
+        section.innerHTML = `
+            <header class="era reveal" id="${era.id}">
+                <span class="era-num">${era.num} · ${era.years}</span>
+                <h2>${era.name}</h2>
+                <p>${era.blurb}</p>
+            </header>
+            <div class="timeline">
+                ${items.map(e => `
+                <article class="entry reveal${e.major ? ' major' : ''}${e.incident ? ' incident' : ''}" data-kind="${e.kind}">
+                    <div class="entry-meta">
+                        <span class="entry-date">${e.date}</span>
+                        <span class="kind${e.incident ? ' incident' : ''}">${e.kind.toLowerCase()}</span>
+                    </div>
+                    <h3>${esc(e.title)}</h3>
+                    <div class="who">${esc(e.who)}</div>
+                    <p class="desc">${esc(e.desc)}</p>
+                    ${figureHTML(e)}
+                    ${e.link ? `<a class="entry-link" href="${e.link.href}" target="_blank" rel="noopener">${esc(e.link.label)} &rarr;</a>` : ''}
+                </article>`).join('')}
+            </div>`;
+        root.appendChild(section);
+
+        const a = document.createElement('a');
+        a.className = 'chip';
+        a.href = '#' + era.id;
+        a.textContent = era.years.split(' ')[0];
+        a.title = era.name;
+        eraNav.appendChild(a);
+    });
+
+    // ---------------- FILTER ----------------
+    document.querySelectorAll('#kindFilter .chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const kind = btn.dataset.kind;
+            document.querySelectorAll('#kindFilter .chip').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+            document.querySelectorAll('.entry').forEach(el => {
+                el.classList.toggle('hidden', kind !== 'all' && el.dataset.kind !== kind);
+            });
+            document.querySelectorAll('.era-block').forEach(sec => {
+                const any = sec.querySelector('.entry:not(.hidden)');
+                sec.style.display = any ? '' : 'none';
+            });
+        });
+    });
+
+    // ---------------- REVEAL ----------------
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('shown'));
+    } else {
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('shown'); io.unobserve(en.target); } });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    }
+
+    // ---------------- THEME ----------------
+    function toggleTheme() {
+        const html = document.documentElement;
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+    }
+    try { if (localStorage.getItem('theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark'); } catch (e) {}
+
+    // ---------------- CONSTELLATION ----------------
+    const cCanvas = document.getElementById('constellation');
+    const cCtx = cCanvas.getContext('2d');
+    const cNodes = [];
+    const CNUM = window.innerWidth < 600 ? 40 : 80;
+    function cResize() {
+        const dpr = window.devicePixelRatio || 1;
+        cCanvas.width = window.innerWidth * dpr;
+        cCanvas.height = window.innerHeight * dpr;
+        cCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', cResize);
+    cResize();
+    for (let i = 0; i < CNUM; i++) {
+        cNodes.push({ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
+                      vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, r: Math.random() * 2.5 + 1 });
+    }
+    function drawConst() {
+        const w = window.innerWidth, h = window.innerHeight;
+        cCtx.clearRect(0, 0, w, h);
+        const rgb = getComputedStyle(document.documentElement).getPropertyValue('--node-color').trim();
+        for (let i = 0; i < CNUM; i++) {
+            const a = cNodes[i];
+            if (!reduce) { a.x += a.vx; a.y += a.vy; }
+            if (a.x < 0 || a.x > w) a.vx *= -1;
+            if (a.y < 0 || a.y > h) a.vy *= -1;
+            for (let j = i + 1; j < CNUM; j++) {
+                const b = cNodes[j];
+                const dist = Math.hypot(a.x - b.x, a.y - b.y);
+                if (dist < 160) {
+                    cCtx.beginPath(); cCtx.moveTo(a.x, a.y); cCtx.lineTo(b.x, b.y);
+                    cCtx.strokeStyle = 'rgba(' + rgb + ',' + (0.25 * (1 - dist / 160)) + ')';
+                    cCtx.lineWidth = 1; cCtx.stroke();
+                }
+            }
+            cCtx.beginPath(); cCtx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+            cCtx.fillStyle = 'rgba(' + rgb + ', 0.45)'; cCtx.fill();
+        }
+        requestAnimationFrame(drawConst);
+    }
+    drawConst();
+    </script>
+</body>
+</html>
