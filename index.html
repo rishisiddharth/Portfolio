@@ -227,6 +227,80 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
+        .essay-card {
+            display: block;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--card-bg);
+            text-decoration: none;
+            color: var(--text);
+            transition: border-color 0.3s, transform 0.3s, background 0.4s;
+        }
+
+        .essay-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .essay-cover {
+            width: 100%;
+            display: block;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .essay-body { padding: 24px 28px 28px; }
+
+        .essay-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .essay-title {
+            font-family: 'EB Garamond', serif;
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .essay-desc {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+        }
+
+        .essay-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .essay-btn {
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .essay-btn.primary {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .essay-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: transparent;
+        }
+
         .footer-contacts {
             margin-top: 60px;
             padding-top: 30px;
@@ -277,7 +351,7 @@
         <p class="tagline">data / policy / bay area</p>
 
         <p class="bio">
-            I am a Consultant at Zinnov, working across globalization strategy and private equity advisory for technology companies and investor strategy. I evaluate global operating models, talent markets, and technology transformation for enterprise clients and investors. I graduated from American University, and also spent a year at the London School of Economics. Prior to that, I completed research with NASA and the NSF/NSA, worked at an AI startup, and built climate data infrastructure at LSE through the Transition Pathway Initiative. I am originally from Menlo Park, California. I love soccer, reading, and hiking.
+            I am a Consultant at Zinnov, working across globalization strategy and private equity advisory for technology companies and investor strategy. I evaluate global operating models, talent markets, and technology capabilities for enterprise clients and investors. I graduated from American University, and also spent a year at the London School of Economics. Prior to that, I completed research with NASA and the NSF/NSA, worked at an AI startup, and built climate data infrastructure at LSE through the Transition Pathway Initiative. I am originally from Menlo Park, California. I love soccer, reading, and hiking.
         </p>
         <p class="bio">
             The world is changing rapidly, and I am excited to be a part of it.
@@ -293,11 +367,11 @@
 
         <p class="section-label">Life</p>
         <div class="photo-grid">
-            <img src="images/aura.png" alt="Cambridge">
+            <img src="images/cambridge.png" alt="Cambridge">
             <img src="images/chess.jpeg" alt="Chess">
             <img src="images/rishi.png" alt="Rishi" class="wide">
             <img src="images/soccer.png" alt="Soccer">
-            <img src="images/hike.png" alt="Conference">
+            <img src="images/conference.png" alt="Conference">
         </div>
 
         <div class="divider"></div>
@@ -338,6 +412,26 @@
             </div>
         </div>
         <p class="chart-source">source: Our World in Data</p>
+
+        <div class="divider"></div>
+
+        <p class="section-label">Writing</p>
+        <div class="essay-card">
+            <a href="writing/We_Are_the_Neanderthals.pdf" target="_blank">
+                <img src="images/essay-cover.png" alt="We Are the Neanderthals, essay cover" class="essay-cover">
+            </a>
+            <div class="essay-body">
+                <p class="essay-meta">essay / september 2026 / 48 pages</p>
+                <p class="essay-title">We Are the Neanderthals</p>
+                <p class="essay-desc">
+                    AI is not a tool and not an alien. It is a second intelligence grown from ours, and in the only precedent we have, we are the Neanderthals. From Turing to agents: what AI actually is, why we cannot control it, and what we should do instead.
+                </p>
+                <div class="essay-actions">
+                    <a href="writing/We_Are_the_Neanderthals.pdf" target="_blank" class="essay-btn primary">Read the essay</a>
+                    <a href="writing/We_Are_the_Neanderthals.pdf" download class="essay-btn">Download PDF</a>
+                </div>
+            </div>
+        </div>
 
         <div class="footer-contacts">
             <a href="mailto:rs5309a@american.edu">Email</a>
