@@ -113,6 +113,7 @@
         }
 
         .page-links {
+            flex-wrap: wrap;
             display: flex;
             gap: 16px;
             margin-top: 40px;
@@ -165,6 +166,9 @@
             transform: scale(1.02);
             filter: grayscale(0%);
         }
+
+        .edu-grid { grid-template-columns: 1fr 1fr 1fr; }
+        .edu-grid img { height: 180px; }
 
         .photo-grid .wide {
             grid-column: 1 / -1;
@@ -335,6 +339,7 @@
             .photo-grid img { height: 200px; }
             .charts-grid { grid-template-columns: 1fr; }
             .page-links { flex-direction: column; }
+            .edu-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -361,25 +366,27 @@
             <a href="experience.html" class="page-link">Experience</a>
             <a href="books.html" class="page-link">Books</a>
             <a href="ai-timeline.html" class="page-link">AI Timeline</a>
+            <a href="#writing" class="page-link">Writing</a>
         </div>
 
         <div class="divider"></div>
 
         <p class="section-label">Life</p>
         <div class="photo-grid">
-            <img src="images/aura.png" alt="Cambridge">
+            <img src="images/cambridge.png" alt="Cambridge">
             <img src="images/chess.jpeg" alt="Chess">
             <img src="images/rishi.png" alt="Rishi" class="wide">
             <img src="images/soccer.png" alt="Soccer">
-            <img src="images/hike.png" alt="Conference">
+            <img src="images/conference.png" alt="Conference">
         </div>
 
         <div class="divider"></div>
 
         <p class="section-label">Education</p>
-        <div class="photo-grid">
+        <div class="photo-grid edu-grid">
             <img src="images/American_University.png" alt="American University">
             <img src="images/LSE.png" alt="London School of Economics">
+            <img src="images/upenn.jpg" alt="University of Pennsylvania, Penn Engineering" style="object-position: center 25%;">
         </div>
 
         <div class="divider"></div>
@@ -415,13 +422,13 @@
 
         <div class="divider"></div>
 
-        <p class="section-label">Writing</p>
+        <p class="section-label" id="writing">Writing</p>
         <div class="essay-card">
             <a href="writing/We_Are_the_Neanderthals.pdf" target="_blank">
                 <img src="images/essay-cover.png" alt="We Are the Neanderthals, essay cover" class="essay-cover">
             </a>
             <div class="essay-body">
-                <p class="essay-meta">essay / september 2026 / 48 pages</p>
+                <p class="essay-meta">essay / october 2026 / 46 pages</p>
                 <p class="essay-title">We Are the Neanderthals</p>
                 <p class="essay-desc">
                     AI is not a tool and not an alien. It is a second intelligence grown from ours, and in the only precedent we have, we are the Neanderthals. From Turing to agents: what AI actually is, why we cannot control it, and what we should do instead.
