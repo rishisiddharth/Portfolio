@@ -344,13 +344,16 @@
             text-underline-offset: 3px;
         }
 
-        .page-link.folder-link {
+        .page-link.folder-link,
+        .page-link.icon-link {
             display: inline-flex;
             align-items: center;
             gap: 10px;
         }
 
         .folder-icon { width: 26px; height: 22px; flex-shrink: 0; }
+        .link-emoji { font-size: 22px; line-height: 1; }
+        .timeline-icon { width: 26px; height: 22px; flex-shrink: 0; }
 
         .footer-contacts {
             margin-top: 60px;
@@ -399,7 +402,6 @@
         </div>
 
         <h1>Rishi Siddharth</h1>
-        <p class="tagline">data / policy / bay area</p>
 
         <h2 class="section-heading">What I Do</h2>
         <ul class="bullets">
@@ -432,8 +434,8 @@
         -->
 
         <div class="page-links">
-            <a href="experience.html" class="page-link">Experience</a>
-            <a href="ai-timeline.html" class="page-link">AI Timeline</a>
+            <a href="experience.html" class="page-link icon-link"><span class="link-emoji" aria-hidden="true">🧑‍💻</span>Experience</a>
+            <a href="ai-timeline.html" class="page-link icon-link"><svg class="timeline-icon" viewBox="0 0 48 40" aria-hidden="true"><line x1="4" y1="20" x2="44" y2="20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="12" y1="20" x2="12" y2="8" stroke="currentColor" stroke-width="2.5"/><line x1="24" y1="20" x2="24" y2="32" stroke="currentColor" stroke-width="2.5"/><line x1="36" y1="20" x2="36" y2="8" stroke="currentColor" stroke-width="2.5"/><circle cx="12" cy="20" r="5" fill="#4A90D9"/><circle cx="24" cy="20" r="5" fill="#9B6BD9"/><circle cx="36" cy="20" r="5" fill="#E8A92E"/></svg>AI Timeline</a>
             <a href="writing.html" class="page-link folder-link"><svg class="folder-icon" viewBox="0 0 48 40" aria-hidden="true"><path d="M2 6a4 4 0 0 1 4-4h12l5 5h19a4 4 0 0 1 4 4v3H2z" fill="#E8A92E"/><rect x="2" y="11" width="44" height="27" rx="4" fill="#FFCB4C"/><rect x="2" y="11" width="44" height="4" rx="2" fill="#FFD970"/></svg>Writing</a>
         </div>
 
@@ -452,7 +454,7 @@
 
         <p class="section-label">Education</p>
         <div class="photo-grid edu-grid">
-            <img src="images/upenn.png" alt="University of Pennsylvania, Penn Engineering" style="object-position: center 25%;">
+            <img src="images/penn_eng.png" alt="University of Pennsylvania, Penn Engineering">
             <img src="images/American_University.png" alt="American University">
             <img src="images/LSE.png" alt="London School of Economics">
         </div>
