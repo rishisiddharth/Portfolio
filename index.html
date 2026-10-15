@@ -305,6 +305,53 @@
             background: transparent;
         }
 
+        .section-heading {
+            font-family: 'EB Garamond', serif;
+            font-size: 26px;
+            font-weight: 500;
+            color: var(--text);
+            margin: 36px 0 14px;
+        }
+
+        .bullets {
+            list-style: none;
+            margin-bottom: 8px;
+        }
+
+        .bullets li {
+            font-family: 'EB Garamond', serif;
+            font-size: 19px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+            padding-left: 22px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .bullets li::before {
+            content: '';
+            position: absolute;
+            left: 2px; top: 12px;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .bullets a, .bio a {
+            color: var(--text);
+            text-decoration: underline;
+            text-decoration-color: var(--accent);
+            text-underline-offset: 3px;
+        }
+
+        .page-link.folder-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .folder-icon { width: 26px; height: 22px; flex-shrink: 0; }
+
         .footer-contacts {
             margin-top: 60px;
             padding-top: 30px;
@@ -347,26 +394,47 @@
     <canvas id="constellation"></canvas>
 
     <div class="page">
-        <div class="header">
-            <div class="name">Rishi Siddharth</div>
+        <div class="header" style="justify-content: flex-end;">
             <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"></div>
         </div>
 
         <h1>Rishi Siddharth</h1>
         <p class="tagline">data / policy / bay area</p>
 
+        <h2 class="section-heading">What I Do</h2>
+        <ul class="bullets">
+            <li>Consultant at Zinnov on the Globalization Excellence team. I help technology companies and investors figure out where to build teams, how to run global capability centers, and which talent markets can support them. I also work on the private equity side: commercial diligence and screening tech companies.</li>
+            <li>Starting a Master's in Data Science at Penn Engineering in spring 2027.</li>
+            <li>Building AI tools at work, including an engine that drafts statements of work for consulting engagements. I also help run AI Wednesdays, a weekly lunch where colleagues show what they've built with AI.</li>
+            <li>Writing about AI, technology, markets and geopolitics. My latest essay is <a href="writing.html">We Are the Neanderthals</a>.</li>
+        </ul>
+
+        <h2 class="section-heading">Before This</h2>
+        <ul class="bullets">
+            <li>Graduated from American University in data science and international business, with a year at the London School of Economics.</li>
+            <li>Research with NASA on Artemis II Doppler tracking, and NSF/NSA-sponsored research using machine learning to predict which federal bills pass.</li>
+            <li>Worked at an AI startup evaluating language models on payroll systems, and built climate data infrastructure at LSE through the Transition Pathway Initiative.</li>
+        </ul>
+
+        <h2 class="section-heading">Who I Am</h2>
         <p class="bio">
-            I am a Consultant at Zinnov, working across globalization strategy and private equity advisory for technology companies and investor strategy. I evaluate global operating models, talent markets, and technology capabilities for enterprise clients and investors. I graduated from American University, and also spent a year at the London School of Economics. Prior to that, I completed research with NASA and the NSF/NSA, worked at an AI startup, and built climate data infrastructure at LSE through the Transition Pathway Initiative. I am originally from Menlo Park, California. I love soccer, reading, and hiking.
+            I'm originally from Menlo Park, California, and now live in New York. I love soccer, reading and hiking. I spend most of my time thinking about AI, history and empires, markets, and how institutions handle new technology.
         </p>
         <p class="bio">
-            The world is changing rapidly, and I am excited to be a part of it.
+            The world is changing rapidly, and I'm excited to be a part of it.
         </p>
+
+        <!-- Side Quests: add 4-6 real stories, newest first, then uncomment.
+        <h2 class="section-heading">Side Quests</h2>
+        <ul class="bullets">
+            <li>20XX: ...</li>
+        </ul>
+        -->
 
         <div class="page-links">
             <a href="experience.html" class="page-link">Experience</a>
-            <a href="books.html" class="page-link">Books</a>
             <a href="ai-timeline.html" class="page-link">AI Timeline</a>
-            <a href="#writing" class="page-link">Writing</a>
+            <a href="writing.html" class="page-link folder-link"><svg class="folder-icon" viewBox="0 0 48 40" aria-hidden="true"><path d="M2 6a4 4 0 0 1 4-4h12l5 5h19a4 4 0 0 1 4 4v3H2z" fill="#E8A92E"/><rect x="2" y="11" width="44" height="27" rx="4" fill="#FFCB4C"/><rect x="2" y="11" width="44" height="4" rx="2" fill="#FFD970"/></svg>Writing</a>
         </div>
 
         <div class="divider"></div>
@@ -384,9 +452,9 @@
 
         <p class="section-label">Education</p>
         <div class="photo-grid edu-grid">
+            <img src="images/upenn.png" alt="University of Pennsylvania, Penn Engineering" style="object-position: center 25%;">
             <img src="images/American_University.png" alt="American University">
             <img src="images/LSE.png" alt="London School of Economics">
-            <img src="images/upenn.jpg" alt="University of Pennsylvania, Penn Engineering" style="object-position: center 25%;">
         </div>
 
         <div class="divider"></div>
@@ -419,26 +487,6 @@
             </div>
         </div>
         <p class="chart-source">source: Our World in Data</p>
-
-        <div class="divider"></div>
-
-        <p class="section-label" id="writing">Writing</p>
-        <div class="essay-card">
-            <a href="writing/We_Are_the_Neanderthals.pdf" target="_blank">
-                <img src="images/essay-cover.png" alt="We Are the Neanderthals, essay cover" class="essay-cover">
-            </a>
-            <div class="essay-body">
-                <p class="essay-meta">essay / october 2026 / 46 pages</p>
-                <p class="essay-title">We Are the Neanderthals</p>
-                <p class="essay-desc">
-                    AI is not a tool and not an alien. It is a second intelligence grown from ours, and in the only precedent we have, we are the Neanderthals. From Turing to agents: what AI actually is, why we cannot control it, and what we should do instead.
-                </p>
-                <div class="essay-actions">
-                    <a href="writing/We_Are_the_Neanderthals.pdf" target="_blank" class="essay-btn primary">Read the essay</a>
-                    <a href="writing/We_Are_the_Neanderthals.pdf" download class="essay-btn">Download PDF</a>
-                </div>
-            </div>
-        </div>
 
         <div class="footer-contacts">
             <a href="mailto:rs5309a@american.edu">Email</a>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing | Rishi Siddharth</title>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f6f4f0;
+            --text: #2c2c2c;
+            --text-secondary: #555;
+            --text-muted: #999;
+            --accent: #5a7a5a;
+            --accent-dim: #5a7a5a40;
+            --border: #e5e2dc;
+            --toggle-bg: #e5e2dc;
+            --node-color: 90, 122, 90;
+            --card-bg: #ffffff;
+            --chart-fill: rgba(90, 122, 90, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --bg: #111111;
+            --text: #e8e6e1;
+            --text-secondary: #a0a0a0;
+            --text-muted: #555;
+            --accent: #7fa87f;
+            --accent-dim: #7fa87f40;
+            --border: #2a2a2a;
+            --toggle-bg: #2a2a2a;
+            --node-color: 127, 168, 127;
+            --card-bg: #1a1a1a;
+            --chart-fill: rgba(127, 168, 127, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            transition: background 0.4s, color 0.4s;
+            overflow-x: hidden;
+        }
+
+        #constellation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 80px 40px 120px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .header .name {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px; font-weight: 500;
+            letter-spacing: 0.5px; color: var(--text);
+        }
+
+        .theme-toggle {
+            width: 44px; height: 24px;
+            background: var(--toggle-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px; cursor: pointer;
+            position: relative; transition: background 0.3s;
+        }
+
+        .theme-toggle::after {
+            content: ''; width: 18px; height: 18px;
+            background: var(--accent); border-radius: 50%;
+            position: absolute; top: 2px; left: 2px;
+            transition: transform 0.3s;
+        }
+
+        [data-theme="dark"] .theme-toggle::after { transform: translateX(20px); }
+
+        h1 {
+            font-family: 'EB Garamond', serif;
+            font-size: 52px; font-weight: 500;
+            color: var(--text); letter-spacing: -1px;
+            margin-bottom: 12px; line-height: 1.1;
+        }
+
+        .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px; color: var(--text-muted);
+            letter-spacing: 0.5px; margin-bottom: 48px;
+        }
+
+        .bio {
+            font-family: 'EB Garamond', serif;
+            font-size: 21px; line-height: 1.8;
+            color: var(--text-secondary); margin-bottom: 20px;
+        }
+
+        .page-links {
+            flex-wrap: wrap;
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .page-link {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            color: var(--text);
+            padding: 14px 36px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .page-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            width: 100%; height: 1px;
+            background: var(--border);
+            margin: 60px 0;
+        }
+
+        .section-label {
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 28px;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .photo-grid img {
+            width: 100%; height: 220px;
+            object-fit: cover; border-radius: 6px;
+            display: block;
+            transition: transform 0.4s, filter 0.4s;
+            filter: grayscale(20%);
+        }
+
+        .photo-grid img:hover {
+            transform: scale(1.02);
+            filter: grayscale(0%);
+        }
+
+        .edu-grid { grid-template-columns: 1fr 1fr 1fr; }
+        .edu-grid img { height: 180px; }
+
+        .photo-grid .wide {
+            grid-column: 1 / -1;
+            height: 280px;
+        }
+
+        .interests {
+            display: flex; flex-wrap: wrap; gap: 10px;
+        }
+
+        .interest {
+            font-family: 'EB Garamond', serif;
+            font-size: 16px; color: var(--text-secondary);
+            padding: 8px 18px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .interest:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px; padding: 24px;
+            transition: border-color 0.3s, background 0.4s;
+        }
+
+        .chart-card:hover { border-color: var(--accent); }
+
+        .chart-label {
+            font-size: 11px; font-weight: 600;
+            letter-spacing: 1px; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 4px;
+        }
+
+        .chart-number {
+            font-family: 'EB Garamond', serif;
+            font-size: 32px; font-weight: 500;
+            color: var(--text); margin-bottom: 2px;
+        }
+
+        .chart-sub {
+            font-size: 12px; color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .chart-source {
+            font-size: 11px; color: var(--text-muted);
+            text-align: right; margin-top: 16px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .essay-card {
+            display: block;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--card-bg);
+            text-decoration: none;
+            color: var(--text);
+            transition: border-color 0.3s, transform 0.3s, background 0.4s;
+        }
+
+        .essay-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .essay-cover {
+            width: 100%;
+            display: block;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .essay-body { padding: 24px 28px 28px; }
+
+        .essay-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .essay-title {
+            font-family: 'EB Garamond', serif;
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .essay-desc {
+            font-family: 'EB Garamond', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+        }
+
+        .essay-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        .essay-btn {
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .essay-btn.primary {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .essay-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: transparent;
+        }
+
+        .section-heading {
+            font-family: 'EB Garamond', serif;
+            font-size: 26px;
+            font-weight: 500;
+            color: var(--text);
+            margin: 36px 0 14px;
+        }
+
+        .bullets {
+            list-style: none;
+            margin-bottom: 8px;
+        }
+
+        .bullets li {
+            font-family: 'EB Garamond', serif;
+            font-size: 19px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+            padding-left: 22px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .bullets li::before {
+            content: '';
+            position: absolute;
+            left: 2px; top: 12px;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .bullets a, .bio a {
+            color: var(--text);
+            text-decoration: underline;
+            text-decoration-color: var(--accent);
+            text-underline-offset: 3px;
+        }
+
+        .page-link.folder-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .folder-icon { width: 26px; height: 22px; flex-shrink: 0; }
+
+        .footer-contacts {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-contacts a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        .footer-contacts a:hover { color: var(--accent); }
+
+        .footer-location {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 16px;
+            letter-spacing: 0.3px;
+        }
+
+        @media (max-width: 600px) {
+            .page { padding: 40px 20px 80px; }
+            h1 { font-size: 36px; }
+            .photo-grid { grid-template-columns: 1fr; }
+            .photo-grid .wide { height: 220px; }
+            .photo-grid img { height: 200px; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .page-links { flex-direction: column; }
+            .edu-grid { grid-template-columns: 1fr; }
+        }
+
+        .back { font-size: 13px; color: var(--text-muted); text-decoration: none; letter-spacing: 0.5px; }
+        .back:hover { color: var(--accent); }
+        .folder-title { display: flex; align-items: center; gap: 16px; margin-bottom: 36px; }
+        .folder-title .folder-icon { width: 64px; height: 54px; }
+        .folder-title h1 { margin: 0; }
+        .explorer { border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); overflow: hidden; }
+        .explorer-bar { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); }
+        .explorer-bar .folder-icon { width: 18px; height: 15px; }
+        .row { display: grid; grid-template-columns: 1fr 120px 80px; align-items: center; gap: 12px; padding: 12px 16px;
+            text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.2s; }
+        .row:last-child { border-bottom: none; }
+        .row.head { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); padding: 8px 16px; }
+        a.row:hover { background: var(--accent-dim); }
+        .name-cell { display: flex; align-items: center; gap: 12px; font-family: 'EB Garamond', serif; font-size: 19px; }
+        .file-icon { width: 22px; height: 28px; flex-shrink: 0; }
+        .meta-cell { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); }
+        @media (max-width: 600px) { .row { grid-template-columns: 1fr 70px; } .row .pages { display: none; } }
+    </style>
+</head>
+<body>
+    <canvas id="constellation"></canvas>
+
+    <div class="page">
+        <div class="header">
+            <a href="index.html" class="back">&larr; Home</a>
+            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode"></div>
+        </div>
+
+        <div class="folder-title">
+            <svg class="folder-icon" viewBox="0 0 48 40" aria-hidden="true"><path d="M2 6a4 4 0 0 1 4-4h12l5 5h19a4 4 0 0 1 4 4v3H2z" fill="#E8A92E"/><rect x="2" y="11" width="44" height="27" rx="4" fill="#FFCB4C"/><rect x="2" y="11" width="44" height="4" rx="2" fill="#FFD970"/></svg>
+            <h1>Writing</h1>
+        </div>
+
+        <div class="explorer">
+            <div class="explorer-bar"><svg class="folder-icon" viewBox="0 0 48 40" aria-hidden="true"><path d="M2 6a4 4 0 0 1 4-4h12l5 5h19a4 4 0 0 1 4 4v3H2z" fill="#E8A92E"/><rect x="2" y="11" width="44" height="27" rx="4" fill="#FFCB4C"/><rect x="2" y="11" width="44" height="4" rx="2" fill="#FFD970"/></svg>rishisiddharth.com &rsaquo; writing</div>
+            <div class="row head"><span>Name</span><span>Date</span><span class="pages">Pages</span></div>
+            <a class="row" href="writing/We_Are_the_Neanderthals.pdf" target="_blank">
+                <span class="name-cell"><svg class="file-icon" viewBox="0 0 32 40" aria-hidden="true"><path d="M3 0h18l8 8v29a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3z" fill="#fff" stroke="#c9c5bd"/><path d="M21 0v8h8" fill="#ece9e3" stroke="#c9c5bd"/><rect x="0" y="22" width="22" height="11" rx="2" fill="#D93025"/><text x="11" y="30.5" text-anchor="middle" font-family="Arial" font-size="8" font-weight="700" fill="#fff">PDF</text></svg>We Are the Neanderthals</span>
+                <span class="meta-cell">Oct 2026</span>
+                <span class="meta-cell pages">46</span>
+            </a>
+            <!-- To add a piece: copy the <a class="row"> block above, point href at the new PDF in writing/, and update the name, date and pages. -->
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+
+        const canvas = document.getElementById('constellation');
+        const ctx = canvas.getContext('2d');
+        const nodes = [];
+        const NUM = 80;
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        for (let i = 0; i < NUM; i++) {
+            nodes.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                r: Math.random() * 2.5 + 1
+            });
+        }
+
+        function drawConstellation() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            ctx.clearRect(0, 0, w, h);
+            const style = getComputedStyle(document.documentElement);
+            const rgb = style.getPropertyValue('--node-color').trim();
+
+            for (let i = 0; i < NUM; i++) {
+                const a = nodes[i];
+                a.x += a.vx; a.y += a.vy;
+                if (a.x < 0 || a.x > w) a.vx *= -1;
+                if (a.y < 0 || a.y > h) a.vy *= -1;
+
+                for (let j = i + 1; j < NUM; j++) {
+                    const b = nodes[j];
+                    const dist = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+                    if (dist < 160) {
+                        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+                        ctx.strokeStyle = 'rgba(' + rgb + ',' + (0.25 * (1 - dist / 160)) + ')';
+                        ctx.lineWidth = 1; ctx.stroke();
+                    }
+                }
+                ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(' + rgb + ', 0.45)'; ctx.fill();
+            }
+            requestAnimationFrame(drawConstellation);
+        }
+        drawConstellation();
+
+    </script>
+</body>
+</html>
