@@ -140,6 +140,8 @@
             image-orientation: from-image;
         }
 
+        .print.land img { width: 340px; }
+
         .print figcaption {
             font-family: 'Caveat', cursive;
             font-size: 22px;
@@ -514,6 +516,7 @@
         @media (max-width: 720px) {
             .page, .topbar { padding-left: 20px; padding-right: 20px; }
             .print img { width: 160px; height: 185px; }
+            .print.land img { width: 250px; }
             .print figcaption { font-size: 19px; }
             .strip-track { gap: 22px; }
             h1 { font-size: 42px; }
@@ -550,12 +553,16 @@
     <!-- Photo strip. To change a photo, edit both copies of the set below (the second copy makes the loop seamless). -->
     <div class="strip" aria-label="Photos">
         <div class="strip-track">
+            <figure class="print land" style="--tilt:-2deg"><img src="images/family.jpg" alt="Rishi with his family"></figure>
+            <figure class="print" style="--tilt:2.5deg"><img style="object-position: center 75%;" src="images/hawaii.jpg" alt="With friends at an overlook in Hawaii"></figure>
             <figure class="print" style="--tilt:-3deg"><img src="images/rishi.png" alt="Playing chess"></figure>
             <figure class="print" style="--tilt:2deg"><img src="images/chess.jpeg" alt="Rishi at a podium"></figure>
             <figure class="print" style="--tilt:-1.5deg"><img src="images/soccer.png" alt="Playing soccer"></figure>
             <figure class="print" style="--tilt:3deg"><img src="images/IMG_1461.jpeg" alt="At an event"></figure>
             <figure class="print" style="--tilt:-2.5deg"><img src="images/cambridge.png" alt="On the pitch"></figure>
 
+            <figure class="print land" style="--tilt:-2deg" aria-hidden="true"><img src="images/family.jpg" alt=""></figure>
+            <figure class="print" style="--tilt:2.5deg" aria-hidden="true"><img style="object-position: center 75%;" src="images/hawaii.jpg" alt=""></figure>
             <figure class="print" style="--tilt:-3deg" aria-hidden="true"><img src="images/rishi.png" alt=""></figure>
             <figure class="print" style="--tilt:2deg" aria-hidden="true"><img src="images/chess.jpeg" alt=""></figure>
             <figure class="print" style="--tilt:-1.5deg" aria-hidden="true"><img src="images/soccer.png" alt=""></figure>
