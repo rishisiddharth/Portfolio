@@ -509,6 +509,38 @@
             letter-spacing: 0.3px;
         }
 
+
+        /* ---------- Terminal ---------- */
+        .terminal {
+            background: #17191b;
+            border: 1px solid #2c2f33;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(20, 20, 20, 0.18);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14.5px;
+            line-height: 1.75;
+            color: #d9d6cf;
+        }
+        .t-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #202326; border-bottom: 1px solid #2c2f33; }
+        .t-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .t-dot.r { background: #ff5f57; } .t-dot.y { background: #febc2e; } .t-dot.g { background: #28c840; }
+        .t-title { margin-left: auto; margin-right: auto; font-size: 12px; color: #7d8085; transform: translateX(-26px); }
+        .t-body { padding: 20px 24px 22px; }
+        .t-cmd { margin-top: 14px; }
+        .t-cmd:first-child { margin-top: 0; }
+        .t-prompt { color: #8fbf8f; }
+        .t-out { padding-left: 4px; color: #b9b6af; }
+        .t-out b { color: #f1eee8; font-weight: 500; }
+        .t-arrow { color: #6b6e73; margin-right: 6px; }
+        .t-out a { color: #ffcb4c; text-decoration: none; border-bottom: 1px dashed #ffcb4c80; }
+        .t-out a:hover { color: #ffe08a; border-bottom-style: solid; }
+        .t-cursor { display: inline-block; width: 9px; height: 17px; background: #d9d6cf; vertical-align: -3px; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        .terminal.armed .t-out, .terminal.armed .t-cmd { visibility: hidden; }
+        .terminal.armed .t-show { visibility: visible; }
+        @media (max-width: 720px) { .terminal { font-size: 12.5px; } .t-body { padding: 16px 16px 18px; } }
+
         @media (prefers-reduced-motion: reduce) {
             .strip-track { animation: none; }
         }
@@ -573,30 +605,25 @@
 
     <div class="page">
 
-        <p class="section-label">Now / Before / Writing</p>
-        <div class="cards">
-            <div class="card">
-                <p class="card-kicker">Now</p>
-                <ul>
-                    <li><strong>Zinnov</strong>, globalization strategy and private equity advisory</li>
-                    <li><strong>Penn Engineering</strong>, Master's in Data Science</li>
-                    <li>Building internal AI tools and running AI Wednesdays</li>
-                </ul>
+        <p class="section-label">About</p>
+        <div class="terminal" id="terminal">
+            <div class="t-bar"><span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span><span class="t-title">rishi — zsh</span></div>
+            <div class="t-body">
+                <div class="t-cmd"><span class="t-prompt">rishi@nyc ~ %</span> <span class="t-typed" data-cmd="whoami --now">whoami --now</span></div>
+                <div class="t-out"><span class="t-arrow">→</span> consultant @ <b>Zinnov</b> · globalization + PE advisory</div>
+                <div class="t-out"><span class="t-arrow">→</span> MS Data Science @ <b>Penn Engineering</b></div>
+                <div class="t-out"><span class="t-arrow">→</span> building internal AI tools · running AI Wednesdays</div>
+
+                <div class="t-cmd"><span class="t-prompt">rishi@nyc ~ %</span> <span class="t-typed" data-cmd="history">history</span></div>
+                <div class="t-out"><span class="t-arrow">→</span> <b>American University</b> · a year at <b>LSE</b></div>
+                <div class="t-out"><span class="t-arrow">→</span> <b>NASA</b> Artemis II · <b>NSF/NSA</b> ML research</div>
+                <div class="t-out"><span class="t-arrow">→</span> AI startup · climate data @ LSE</div>
+
+                <div class="t-cmd"><span class="t-prompt">rishi@nyc ~ %</span> <span class="t-typed" data-cmd="open writing/">open writing/</span></div>
+                <div class="t-out"><span class="t-arrow">→</span> <a href="writing.html">📁 We Are the Neanderthals ↗</a></div>
+
+                <div class="t-cmd t-last"><span class="t-prompt">rishi@nyc ~ %</span> <span class="t-cursor"></span></div>
             </div>
-            <div class="card">
-                <p class="card-kicker">Before</p>
-                <ul>
-                    <li><strong>American University</strong>, data science, plus a year at LSE</li>
-                    <li><strong>NASA</strong> Artemis II research and <strong>NSF/NSA</strong> machine learning research</li>
-                    <li>An AI startup, and climate data at LSE</li>
-                </ul>
-            </div>
-            <a class="card" href="writing.html">
-                <p class="card-kicker"><svg class="folder-icon" viewBox="0 0 48 40" aria-hidden="true"><path d="M2 6a4 4 0 0 1 4-4h12l5 5h19a4 4 0 0 1 4 4v3H2z" fill="#E8A92E"/><rect x="2" y="11" width="44" height="27" rx="4" fill="#FFCB4C"/><rect x="2" y="11" width="44" height="4" rx="2" fill="#FFD970"/></svg>Writing</p>
-                <p class="card-title">We Are the Neanderthals</p>
-                <p class="card-desc">AI is a second intelligence grown from ours, and we won't stay in control forever.</p>
-                <p class="card-more">open folder &rarr;</p>
-            </a>
         </div>
 
         <p class="section-label">Education</p>
@@ -710,6 +737,32 @@
             requestAnimationFrame(drawConstellation);
         }
         drawConstellation();
+        (function () {
+            const term = document.getElementById('terminal');
+            if (!term || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+            const rows = Array.from(term.querySelectorAll('.t-cmd, .t-out'));
+            term.classList.add('armed');
+            const typed = term.querySelectorAll('.t-typed');
+            typed.forEach(t => t.textContent = '');
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            async function play() {
+                for (const row of rows) {
+                    row.classList.add('t-show');
+                    const t = row.querySelector('.t-typed');
+                    if (t) {
+                        await sleep(220);
+                        for (const ch of t.dataset.cmd) { t.textContent += ch; await sleep(45); }
+                        await sleep(160);
+                    } else {
+                        await sleep(90);
+                    }
+                }
+            }
+            const io = new IntersectionObserver(entries => {
+                if (entries.some(e => e.isIntersecting)) { io.disconnect(); play(); }
+            }, { threshold: 0.35 });
+            io.observe(term);
+        })();
 
         let chart1Instance = null;
         let chart2Instance = null;
@@ -759,6 +812,7 @@
         }
 
         buildCharts();
+
     </script>
 </body>
 </html>
